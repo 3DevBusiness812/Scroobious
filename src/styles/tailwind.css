@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  React PDF annotations cause PDFs that have annotations to garble the whole UI
+  This disables annotations
+*/
+.react-pdf__Page__annotations {
+  display: none !important;
+}

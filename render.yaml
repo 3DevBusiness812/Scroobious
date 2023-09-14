@@ -1,0 +1,165 @@
+# Spec: https://render.com/docs/yaml-spec
+# https://render.com/docs/deploy-django#use-renderyaml-for-deployments
+# Deploy Previews configuration: https://render.com/docs/preview-environments#override-preview-plans
+#  - https://community.render.com/t/yaml-preview-pull-requests-environment-variables-and-not-activating/624
+services:
+  # https://github.com/render-examples/redis
+  ##########################################################################################
+  # Production
+  ##########################################################################################
+
+  - type: redis
+    name: scroobious-redis
+    plan: starter
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: [] # only allow internal connections
+
+  - type: web
+    name: scroobious-api
+    env: node
+    region: oregon
+    plan: standard
+    branch: production
+    # healthCheckPath: /health
+    buildCommand: yarn build:api
+    startCommand: yarn start:api
+    envVars:
+      - key: WARTHOG_DB_URL
+        fromDatabase:
+          name: scroobious-db-prod
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: scroobious-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: scroobious-redis
+          property: port
+      - fromGroup: production
+
+  - type: worker
+    name: scroobious-jobs
+    env: node
+    region: oregon
+    plan: starter
+    branch: production
+    buildCommand: yarn build:jobs
+    startCommand: yarn start:jobs
+    envVars:
+      - key: WARTHOG_DB_URL
+        fromDatabase:
+          name: scroobious-db-prod
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: scroobious-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: scroobious-redis
+          property: port
+      - fromGroup: production
+
+  - type: web
+    name: scroobious-web
+    env: node
+    region: oregon
+    plan: standard
+    branch: production
+    # healthCheckPath: /health
+    buildCommand: yarn build:web
+    startCommand: yarn start:web
+
+  ##########################################################################################
+  # Staging
+  ##########################################################################################
+
+  - type: redis
+    name: scroobious-redis-staging
+    plan: starter
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: [] # only allow internal connections
+
+  - type: web
+    name: scroobious-api-staging
+    env: node
+    region: oregon
+    plan: starter
+    branch: master
+    # healthCheckPath: /health
+    buildCommand: yarn build:api
+    startCommand: yarn start:api
+    envVars:
+      - key: WARTHOG_DB_URL
+        fromDatabase:
+          name: scroobious-db-staging
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: scroobious-redis-staging
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: scroobious-redis-staging
+          property: port
+      - fromGroup: staging
+
+  - type: worker
+    name: scroobious-jobs-staging
+    env: node
+    region: oregon
+    plan: starter
+    branch: master
+    buildCommand: yarn build:jobs
+    startCommand: yarn start:jobs
+    envVars:
+      - key: WARTHOG_DB_URL
+        fromDatabase:
+          name: scroobious-db-staging
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: scroobious-redis-staging
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: scroobious-redis-staging
+          property: port
+      - fromGroup: staging
+
+  - type: web
+    name: scroobious-web-staging
+    env: node
+    region: oregon
+    plan: starter
+    branch: master
+    # healthCheckPath: /health
+    buildCommand: yarn build:web
+    startCommand: yarn start:web
+
+databases:
+  - name: scroobious-db-prod
+    databaseName: scroobious
+    plan: standard
+    user: scroobious_user # optional
+    ipAllowList:
+      - source: 44.193.153.196/32
+        description: Preset.io
+      - source: 52.70.123.52/32
+        description: Preset.io
+      - source: 54.83.88.93/32
+        description: Preset.io
+  - name: scroobious-db-staging
+    databaseName: scroobious_staging
+    plan: starter
+    user: scroobious_user # optional
+    ipAllowList: [] # only allow internal connections

@@ -1,0 +1,12 @@
+RESOURCE_NAME=company_pitch ./tools/import-csv.sh
+RESOURCE_NAME=company ./tools/import-csv.sh
+RESOURCE_NAME=employee ./tools/import-csv.sh
+RESOURCE_NAME=founder_video_id ./tools/import-csv.sh
+RESOURCE_NAME=allison_suggested_resource ./tools/import-csv.sh
+RESOURCE_NAME=module_1 ./tools/import-csv.sh
+RESOURCE_NAME=module_2 ./tools/import-csv.sh
+RESOURCE_NAME=module_3 ./tools/import-csv.sh
+RESOURCE_NAME=module_4 ./tools/import-csv.sh
+RESOURCE_NAME=module_5 ./tools/import-csv.sh
+RESOURCE_NAME=perk ./tools/import-csv.sh
+RESOURCE_NAME=user ./tools/import-csv.sh

@@ -1,0 +1,12 @@
+.git
+.vscode
+dist
+logs
+node_modules
+examples
+mobile
+superset
+tools
+.env
+.env.local
+caddy.local

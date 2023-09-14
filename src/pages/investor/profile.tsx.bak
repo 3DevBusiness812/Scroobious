@@ -1,0 +1,163 @@
+import { gql } from '@apollo/client'
+import { Button } from '@chakra-ui/react'
+import { InputField } from '@components'
+import { MultiSelectCodeList } from '@components'
+import AppNavigation from '@components'
+import { processApolloError } from '@core/apollo'
+import { initializeApollo } from '@core/apollo-client'
+import { processFormData } from '@core/form'
+import { protect } from '@core/server'
+import { ScroobiousSession } from '@core/types'
+import { updateInvestorProfile } from '@src/auth/investor-profile.mutation'
+import { InvestorProfile, InvestorProfileCreateInput } from '@binding'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { useRouter } from 'next/router'
+import React from 'react'
+import { FieldValues, useForm } from 'react-hook-form'
+
+type ProfilePropsSuccess = {
+  investorProfile: InvestorProfile
+}
+interface ProfilePropsFail {
+  errors: string
+}
+type ProfileProps = ProfilePropsSuccess | ProfilePropsFail
+
+function isPageError(props: ProfileProps): props is ProfilePropsFail {
+  return (props as ProfilePropsFail).errors !== undefined
+}
+
+export default function Profile(props: ProfileProps) {
+  const { register, formState, setError, control, clearErrors, handleSubmit } = useForm({
+    defaultValues: (props as any).investorProfile as FieldValues,
+  })
+  const router = useRouter()
+
+  if (isPageError(props)) {
+    return <div>{props.errors}</div>
+  }
+
+  // console.log('investorProfile :>> ', props.investorProfile)
+
+  const onSubmit = async (data: any) => {
+    // console.log('data :>> ', data)
+    let result
+    try {
+      const processedData = processFormData<InvestorProfileCreateInput>(data)
+
+      // TODO: create this mutation
+      result = await updateInvestorProfile(processedData, { id: props.investorProfile.id })
+      // console.log('result :>> ', result)
+
+      // TODO: use generic error handling logic
+      if (result?.error || result?.errors) {
+        // return setError('accreditationStatuses', { message: result?.error?.message })
+      }
+
+      alert('Success!')
+    } catch (error) {
+      console.error('ERROR', error)
+      return
+    }
+  }
+
+  return (
+    <AppNavigation>
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="mt-4 text-2xl font-extrabold text-center text-gray-900">Update investing info</h2>
+        </div>
+
+        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-lg">
+          <div className="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <MultiSelectCodeList
+                label="Self-verification of accreditation status"
+                inputClassName="mb-6"
+                errors={formState.errors}
+                control={control}
+                listName="accreditationStatus"
+                required={true}
+                fieldId="accreditationStatuses"
+              />
+
+              <InputField
+                label="LinkedIn URL"
+                fieldId="linkedinUrl"
+                errors={formState.errors}
+                register={register}
+                required={true}
+                onChange={clearErrors.bind(null, 'linkedinUrl')}
+              />
+
+              <MultiSelectCodeList
+                label="Investor type"
+                inputClassName="mb-6"
+                errors={formState.errors}
+                control={control}
+                listName="investorType"
+                required={true}
+                fieldId="investorTypes"
+              />
+
+              <div className="text-center">
+                <Button type="submit" width="120" colorScheme="orange">
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </AppNavigation>
+  )
+}
+
+const PROFILE_QUERY = gql`
+  query investorProfile($where: InvestorProfileWhereUniqueInput!) {
+    investorProfile(where: $where) {
+      id
+      accreditationStatuses
+      linkedinUrl
+      investorTypes
+    }
+  }
+`
+export type ProfileQuery = any // TODO: codegen
+
+export const getServerSideProps: GetServerSideProps = protect(
+  async (context: GetServerSidePropsContext, session: ScroobiousSession) => {
+    const client = initializeApollo({ headers: context?.req?.headers })
+
+    try {
+      const payload = await client.query<ProfileQuery>({
+        query: PROFILE_QUERY,
+        variables: {
+          where: {
+            userId: session.user.id,
+          },
+        },
+      })
+
+      let investorProfile = payload.data.investorProfile
+
+      const result = {
+        props: {
+          // Make sure not to pass in extra fields as this will be fed right into the form (remove __typename, etc...)
+          investorProfile: {
+            id: investorProfile.id,
+            accreditationStatuses: investorProfile.accreditationStatuses,
+            linkedinUrl: investorProfile.linkedinUrl,
+            investorTypes: investorProfile.investorTypes,
+          },
+        },
+      }
+      // addApolloState(client, result)
+      return result
+    } catch (error) {
+      // console.log('ERROR ON Profile INDEX PAGE')
+      const errors = processApolloError(error)
+      return { props: { errors: JSON.stringify(errors) } }
+    }
+  },
+)

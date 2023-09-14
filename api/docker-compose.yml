@@ -1,0 +1,105 @@
+version: '3.7'
+
+services:
+  redis:
+    env_file: .env
+    container_name: scroobious_redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+      #  - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf.dev:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    # The redis.conf file is used in Render, too.  So we leave the Production value in there
+    # and specify the dir param here so that it's in a place that's accessible in the development
+    # filesystem
+    command: redis-server --requirepass fake_password
+
+  # Note: can alternately run `taskforce -n "caddy connection" -t <API_TOKEN>`
+  # # See https://docs.taskforce.sh/getting-started/taskforce-connector
+  # taskforce-connector:
+  #   env_file: .env
+  #   build: https://github.com/taskforcesh/taskforce-connector.git#master
+  #   environment:
+  #     TASKFORCE_CONNECTION: 'local taskforce provisioner'
+  #     TASKFORCE_TEAM: 'Taskforce'
+  #     TASKFORCE_TOKEN: ${TASKFORCE_TOKEN}
+  #     REDIS_URI: ${REDIS_URL}
+
+  postgres:
+    env_file: .env
+    image: postgis/postgis
+    container_name: scroobious_postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - db-scroobious-data-pg13:/var/lib/postgresql/data:delegated
+    environment:
+      - POSTGRES_USER=${WARTHOG_DB_USERNAME}
+      - POSTGRES_PASSWORD=${WARTHOG_DB_PASSWORD}
+      - POSTGRES_DB=${WARTHOG_DB_DATABASE}
+      - POSTGRES_NON_ROOT_USER=${WARTHOG_DB_USERNAME}
+      - POSTGRES_NON_ROOT_PASSWORD=${WARTHOG_DB_PASSWORD}
+
+  api:
+    env_file: .env
+    container_name: scroobious_api
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.api
+    ports:
+      - ${WARTHOG_API_PORT}:${WARTHOG_API_PORT}
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - SHELL=/bin/bash # Needed for chokidar-cli in DEV
+      - DEBUG
+      - NODE_ENV
+    volumes:
+      - .:/app:delegated
+      - ./node_modules:/app/node_modules
+    command: yarn start:api:docker
+
+  jobs:
+    env_file: .env
+    container_name: scroobious_jobs
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.jobs
+    expose:
+      - '5678'
+    restart: always
+    stdin_open: true
+    # cap_add:
+    #   - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:./seccomp_profile.json
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DEBUG
+      - NODE_ENV
+    volumes:
+      - ./:/app:delegated
+      - ./node_modules:/app/node_modules
+    command: yarn start:jobs:docker
+
+    # Web
+    # https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
+
+volumes:
+  db-scroobious-data-pg13:
+    name: db-scroobious-data-pg13
+    external: false
+
+    # superset_home:
+  # external: false
+  redis:
+    external: false

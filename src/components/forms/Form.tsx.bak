@@ -1,0 +1,32 @@
+import React from 'react'
+import { useForm } from 'react-hook-form'
+
+interface FormProps extends React.HTMLAttributes<HTMLFormElement> {
+  defaultValues: any
+}
+
+export function Form({ defaultValues, children, onSubmit, ...props }: FormProps) {
+  const methods = useForm({ defaultValues })
+  const { handleSubmit } = methods
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} {...props}>
+      {React.Children.map(children, (child: any) => {
+        if (!child) {
+          return null
+        }
+        return child.props.name
+          ? React.createElement(child.type, {
+              ...child.props,
+              register: methods.register,
+              errors: methods.formState.errors,
+              setValue: methods.setValue,
+              clearErrors: methods.clearErrors,
+              control: methods.control,
+              key: child.props.name,
+            })
+          : child
+      })}
+    </form>
+  )
+}

@@ -1,0 +1,47 @@
+{
+  "ts-node": {
+    "transpileOnly": true
+  },
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "keyofStringsOnly": true,
+    "lib": ["dom", "esnext.asynciterable", "es2016"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "outDir": "./dist",
+    // "paths": {
+    //   "@core/*": ["core/*"]
+    // },
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "es2016",
+    "types": ["isomorphic-fetch", "node"],
+    "typeRoots": ["./node_modules/@types", "./types"]
+  },
+  "exclude": ["node_modules/**/*", "generated/**/*", "src/**/*.test.ts", "src/**/*.factory.ts"],
+  "include": [
+    "src/api.ts",
+    "src/jobs.ts",
+    "src/**/*.model.ts",
+    "src/**/*.service.ts",
+    "src/**/*.resolver.ts",
+    "src/**/*.job.ts",
+    "src/db/ormconfig.ts",
+    "db/**/*",
+    "seed/**/*",
+    "tools/**/*",
+    "types/**/*.d.ts"
+  ] // Include DB migrations also
+}

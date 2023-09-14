@@ -1,0 +1,67 @@
+/*
+  Originally, I was going to have a "COMPLETION" step type that you'd use to specifically end a course
+  This seemed limiting as you might want to end with a video (rather than just text)
+  So instead, once the step with the highest sequence number is completed, the course is done, so we don't need this component anymore
+  Keeping around until I'm certain we won't want to bring it back
+*/
+
+import { gql, useMutation } from '@apollo/client'
+import { Box } from '@chakra-ui/react'
+import { Button as ChakraButton } from '@chakra-ui/react'
+import Header from '@components/header'
+import { CourseStepDefinition } from '@binding'
+import { Course } from '@binding'
+import React from 'react'
+
+interface CourseCompletionStepProps {
+  definition: CourseStepDefinition
+  courseId: string
+  onSubmit: (defId: string) => any
+}
+
+export const COMPLETE_COURSE = gql`
+  mutation completeCourse($where: CourseWhereUniqueInput!) {
+    completeCourse(where: $where) {
+      id
+      status
+    }
+  }
+`
+
+export function CourseCompletionStep({ courseId, definition, onSubmit }: CourseCompletionStepProps) {
+  const [submitCourseStep, { data, loading, error }] = useMutation<{ completeCourse: Course }>(COMPLETE_COURSE)
+
+  const onCompletionSubmit = async () => {
+    // console.log('onCompletionSubmit :>>')
+
+    try {
+      await submitCourseStep({
+        variables: {
+          where: {
+            id: courseId,
+          },
+        },
+      })
+    } catch (error) {
+      // TODO: need to add error handling with update to UI
+      console.error(error)
+    }
+
+    return onSubmit(definition.id)
+  }
+
+  return (
+    <Box className="mt-8">
+      <Header title={(definition.config.title as string) || definition.name} />
+
+      {definition.config.description ||
+        (definition.description && <p className="mb-4">{definition.config.description || definition.description}</p>)}
+
+      <div className="text-center">
+        <ChakraButton onClick={onCompletionSubmit} width="120" colorScheme="orange" isLoading={loading}>
+          {definition.config.buttonText || 'Submit'}
+        </ChakraButton>
+      </div>
+    </Box>
+  )
+}

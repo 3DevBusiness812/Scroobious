@@ -1,0 +1,33 @@
+# Main docs: https://github.com/microsoft/playwright/blob/master/docs/docker/README.md
+# Relevant PR: https://github.com/microsoft/playwright/pull/3779/files
+# Troubleshooting: https://github.com/microsoft/playwright/blob/master/docs/troubleshooting.md
+# "For web scraping or crawling, we recommend to create a separate user inside the Docker container and use the seccomp profile."
+
+FROM mcr.microsoft.com/playwright:bionic
+
+RUN useradd -ms /bin/bash node
+RUN mkdir /app
+WORKDIR /app
+RUN chown -R node:node /app
+COPY . .
+RUN yarn
+RUN yarn build:jobs
+
+CMD ["yarn", "start:jobs"]
+
+# https://github.com/Zenika/alpine-chrome/blob/master/with-playwright/Dockerfile
+
+############
+# TODO: get the following docker file working at home so that Render and local can share
+############
+# FROM zenika/alpine-chrome:with-node
+
+# ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD 1
+# ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser
+# WORKDIR /usr/src/app
+# COPY --chown=chrome ./api/package.json ./api/yarn.lock ./
+# RUN yarn
+# COPY --chown=chrome ./api ./
+# ENTRYPOINT ["tini", "--"]
+
+# CMD ["yarn", "start:jobs"]

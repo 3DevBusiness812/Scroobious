@@ -1,0 +1,615 @@
+-----------------------------------------------------
+-- Clean up bubble_user
+-----------------------------------------------------
+ALTER TABLE "bubble_user" ADD "migrate_record" varchar;
+UPDATE bubble_user SET migrate_record = 'true';
+UPDATE bubble_user SET migrate_record = 'false' WHERE email LIKE '%scroobious.com%';
+
+ALTER TABLE "bubble_user" ADD "clean_ethnicity" character varying;
+UPDATE bubble_user bu SET clean_ethnicity = (SELECT id FROM ethnicity WHERE description = bu.ethnicity);
+-- SELECT clean_ethnicity, ethnicity FROM bubble_user WHERE clean_ethnicity IS NULL;
+
+ALTER TABLE "bubble_user" ADD "clean_disability" character varying;
+UPDATE bubble_user bu SET clean_disability = (SELECT id FROM disability WHERE description = bu.disability);
+-- SELECT clean_disability, disability FROM bubble_user WHERE clean_disability IS NULL;
+
+ALTER TABLE "bubble_user" ADD "clean_gender" character varying;
+UPDATE bubble_user bu SET clean_gender = (SELECT id FROM gender WHERE description = bu.gender);
+-- SELECT clean_gender, disability FROM bubble_user WHERE clean_gender IS NULL;
+
+ALTER TABLE "bubble_user" ADD "clean_sexual_orientation" character varying;
+UPDATE bubble_user bu SET clean_sexual_orientation = (SELECT id FROM sexual_orientation WHERE description = bu.orientation);
+-- SELECT clean_sexual_orientation, orientation FROM bubble_user WHERE clean_sexual_orientation IS NULL;
+
+ALTER TABLE "bubble_user" ADD "clean_transgender" character varying;
+UPDATE bubble_user bu SET clean_transgender = (SELECT id FROM transgender WHERE description = bu.transgender);
+-- SELECT clean_transgender, transgender FROM bubble_user WHERE clean_transgender IS NULL;
+
+-----------------------------------------------------
+-- Clean up bubble_employee
+-----------------------------------------------------
+ALTER TABLE "bubble_employee" ADD "clean_company_roles" character varying[];
+UPDATE bubble_employee be
+SET clean_company_roles = sub_table.company_role_array
+FROM (
+	SELECT
+	  (SELECT array_agg(cr.id) FROM unnest(string_to_array(be."companyRole", ' , ')) company_role_description LEFT JOIN company_role cr on cr.description = company_role_description) AS company_role_array,
+	  "unique id"
+	FROM bubble_employee be
+) sub_table
+WHERE be."unique id" = sub_table."unique id";
+
+ALTER TABLE "bubble_employee" ADD "clean_working_status" character varying;
+UPDATE bubble_employee be SET clean_working_status = (SELECT id FROM working_status WHERE description = be."workingStatus");
+
+ALTER TABLE "bubble_employee" ADD "valid_record" boolean;
+
+-----------------------------------------------------
+-- Clean up bubble_company
+-----------------------------------------------------
+ALTER TABLE "bubble_company" ADD "clean_company_state" character varying;
+UPDATE bubble_company bc SET clean_company_state = (SELECT id FROM state_province WHERE description = bc."co.hq location");
+-- SELECT clean_company_state, "co.hq location" FROM bubble_company WHERE clean_company_state IS NULL;
+
+ALTER TABLE "bubble_company" ADD "clean_company_stage" character varying;
+UPDATE bubble_company bc SET clean_company_stage = (SELECT id FROM company_stage WHERE description = bc.companystage);
+-- SELECT clean_company_stage, companystage FROM bubble_company WHERE clean_company_stage IS NULL;
+
+-- ALTER TABLE "bubble_company" ADD "clean_location" character varying;
+-- UPDATE bubble_company be SET clean_location = (SELECT id FROM company_stage WHERE description = be.companystage)
+-- -- SELECT clean_location, companystage FROM bubble_company WHERE clean_location IS NULL;
+
+ALTER TABLE "bubble_company" ADD "clean_country" character varying;
+UPDATE bubble_company be SET clean_country = (SELECT id FROM country WHERE description = be."country of incorporation");
+UPDATE bubble_company be SET clean_country = 'USA' WHERE be."country of incorporation" = 'United States'; 
+-- SELECT clean_country, "country of incorporation" FROM bubble_company WHERE clean_country IS NULL;
+
+ALTER TABLE "bubble_company" ADD "clean_funding_status" character varying;
+UPDATE bubble_company be SET clean_funding_status = (SELECT id FROM funding_status WHERE description = be.fundraisestatus);
+-- SELECT clean_funding_status, fundraisestatus FROM bubble_company WHERE clean_funding_status IS NULL;
+
+ALTER TABLE "bubble_company" ADD "clean_presented" character varying;
+UPDATE bubble_company bc SET clean_presented = (SELECT id FROM presentation_status WHERE description = bc.presented);
+-- SELECT clean_presented, presented FROM bubble_company WHERE clean_presented IS NULL;
+
+ALTER TABLE "bubble_company" ADD "clean_revenue" character varying;
+UPDATE bubble_company be SET clean_revenue = (SELECT id FROM revenue WHERE description = be.revenue);
+-- SELECT clean_revenue, revenue FROM bubble_company WHERE clean_revenue IS NULL;
+
+ALTER TABLE "bubble_company" ADD "clean_corporate_structure" character varying;
+UPDATE bubble_company be SET clean_corporate_structure = (SELECT id FROM corporate_structure WHERE description = be."u.s.corporatestructure");
+-- SELECT clean_corporate_structure, "u.s.corporatestructure" FROM bubble_company WHERE clean_corporate_structure IS NULL;
+
+-- ARRAY TYPE
+ALTER TABLE "bubble_company" ADD "clean_industries" character varying[];
+
+UPDATE bubble_company bc
+SET clean_industries = industries.ind_array
+FROM (
+	SELECT
+	  (SELECT array_agg(i.id) FROM unnest(string_to_array(bc.industry, ' , ')) industry_description LEFT JOIN industry i on i.description = industry_description) AS ind_array,
+	  "unique id"
+	FROM bubble_company bc
+) industries
+WHERE bc."unique id" = industries."unique id";
+
+-- YES/NO
+ALTER TABLE "bubble_company" ADD "clean_team_members" boolean;
+UPDATE bubble_company SET clean_team_members = CASE WHEN "teamMembers" = 'Yes' THEN true WHEN "teamMembers" = 'No' THEN false END;
+-- SELECT clean_team_members, "teamMembers" FROM bubble_company WHERE clean_team_members IS NULL;
+
+----------------------------------------------
+-- user
+----------------------------------------------
+
+-- Temp table for pitch video files
+SELECT substr(md5(random()::text), 0, 25) AS file_id,
+  "unique id"
+INTO TEMP TABLE tmp_user_profile_pic_files
+FROM bubble_user
+WHERE "User type" = 'Founder'
+  AND migrate_record = 'true';
+
+INSERT INTO file(id, created_at, created_by_id, version, owner_id, 
+  url)
+SELECT 
+  tmp.file_id,
+  now() AS created_at,
+  '1' AS created_by_id,
+  1 AS version,
+  '1' AS owner_id,
+  'https://scroobious-app-production.s3.us-west-2.amazonaws.com/user-no-profile-picture.png'
+FROM tmp_user_profile_pic_files tmp;
+
+INSERT INTO public.user (capabilities, created_at, created_by_id, email, id, profile_picture_file_id, name, first_name, owner_id, password, status, updated_at, updated_by_id, version, migrated_from_bubble)
+SELECT
+  '{FOUNDER_FULL}' as capabilities,
+  TO_TIMESTAMP(bu."Creation Date",'Mon DD, YYYY HH:MI AM') AS created_at,
+  bu."unique id" as created_by_id,
+  regexp_replace(regexp_replace(bu.email, '\.', '_'), '@', '__') || '@fake123.com' AS email,
+  -- bu.email AS email,
+  bu."unique id" AS id,
+  tmp.file_id as profile_picture_file_id,
+  trim(both ' ' from concat_ws(' ', bu.first_name, bu.last_name)) AS name,
+  bu.first_name AS first_name,
+  bu."unique id" AS owner_id,
+  'JGFyZ29uMmlkJHY9MTkkbT02NTUzNix0PTIscD0xJGg0TzRoYjZVaUpKL0FaMGtqeFdDZWckclBGV1h3dnRrYnd1K1YrY21qN3VJNFFTZCs4UWYxdGttZnhlbXNFWHZIRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=' AS password,
+  -- substr(md5(random()::text), 0, 25) AS password,
+  CASE WHEN bu."completed on-boarding" = 'yes' THEN 'ACTIVE' ELSE 'ONBOARDING' END AS status,
+  TO_TIMESTAMP(bu."Modified Date",'Mon DD, YYYY HH:MI AM') AS updated_at,
+  bu."unique id" AS updated_by_id,
+  1 AS version,
+  TRUE AS migrated_from_bubble
+FROM bubble_user bu
+INNER JOIN tmp_user_profile_pic_files tmp ON bu."unique id" = tmp."unique id"
+WHERE bu."User type" = 'Founder'
+  AND bu.migrate_record = 'true';
+
+DROP TABLE tmp_user_profile_pic_files;
+
+----------------------------------------------
+-- user_role
+----------------------------------------------
+INSERT INTO user_role(id, owner_id, role_id, created_by_id, user_id, version)
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.id AS owner_id,
+  (SELECT id FROM role WHERE code = 'founder-full') AS role_id,
+  u.id AS created_by_id,
+  u.id AS user_id,
+  1 AS version
+FROM public.user u
+WHERE u.migrated_from_bubble = TRUE;
+
+----------------------------------------------
+-- founder_profile
+----------------------------------------------
+INSERT INTO founder_profile(id, company_roles, created_at, created_by_id, disability,
+  ethnicities, gender, linkedin_url, bubble_location, owner_id, sexual_orientation, source, transgender, twitter_url, updated_at, 
+  user_id, version, working_status, state_province
+)
+
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  be.clean_company_roles AS company_roles,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  bu.clean_disability AS disability,
+  string_to_array(bu.clean_ethnicity, ' , ')::varchar[] AS ethnicities,
+  bu.clean_gender AS gender, 
+  bu."linkedin link" AS linkedin_url,
+  bu.location AS bubble_location,
+  u.id AS owner_id,
+  bu.clean_sexual_orientation AS sexual_orientation,
+  bu.source AS source,
+  bu.clean_transgender AS transgender,
+  bu."twitter link" AS twitter_url,
+  TO_TIMESTAMP(bu."Modified Date",'Mon DD, YYYY HH:MI AM') AS updated_at,
+  u.id AS user_id,
+  1 AS version,
+  be.clean_working_status AS working_status,
+  '' AS state_province
+FROM public.user u
+INNER JOIN bubble_user bu ON u.id = bu."unique id"
+LEFT JOIN bubble_company bc ON bu.company_id = bc."unique id"
+LEFT JOIN bubble_employee be ON bu.employee_id = be."unique id"
+-- INNER JOIN bubble_company bc --- TODO
+WHERE u.migrated_from_bubble = TRUE
+  AND u.status = 'ACTIVE';
+
+----------------------------------------------
+-- organization
+----------------------------------------------
+
+INSERT INTO organization(id, created_at, created_by_id, version, user_id, owner_id,
+  name, website) 
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS user_id,
+  u.id AS owner_id,
+  bc."company name" AS name,
+  bc.website AS website
+FROM public.user u
+INNER JOIN bubble_user bu ON u.id = bu."unique id"
+LEFT JOIN bubble_company bc ON bu.company_id = bc."unique id"
+WHERE u.migrated_from_bubble = TRUE
+  AND u.status = 'ACTIVE';
+
+----------------------------------------------
+-- startup
+----------------------------------------------
+
+INSERT INTO startup(id, created_at, created_by_id, version, owner_id, user_id,
+  company_stage, corporate_structure, country, fundraise_status, industries, name, 
+  organization_id, revenue, short_description, state_province, website, origin_story, additional_team_members, 
+  anything_else, business_challenge, presentation_status, desired_support, deck_comfort_level, presentation_comfort_level) 
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+  u.id AS user_id,
+  bc.clean_company_stage AS company_stage,
+  bc.clean_corporate_structure AS corporate_structure,
+  bc.clean_country AS country,
+  bc.clean_funding_status AS fundraise_status,
+  COALESCE(bc.clean_industries, array[]::varchar[]) AS industries,
+  bc."company name" AS name,
+  o.id AS organization_id,
+  bc.clean_revenue AS revenue,
+  bc.description AS short_description,
+  bc.clean_company_state AS state_province,
+  bc.website AS website,
+  bc."origin story" AS origin_story,
+  
+  bc.clean_team_members AS additional_team_members,
+  bu."anything else" AS anything_else, 
+  bu."Business challenge" AS business_challenge, 
+  bc."presentation comfort lvl" AS presentation_status,
+  bu.support AS desired_support,
+  CAST ( bc."deck comfort lvl" AS integer ) AS deck_comfort_level,
+  CAST ( bc."presentation comfort lvl" AS integer ) AS presentation_comfort_level 
+FROM public.user u
+INNER JOIN bubble_user bu ON u.id = bu."unique id"
+LEFT JOIN bubble_company bc ON bu.company_id = bc."unique id"
+LEFT JOIN organization o ON u.id = o.user_id
+WHERE u.migrated_from_bubble = TRUE
+  AND u.status = 'ACTIVE';
+
+----------------------------------------------
+-- pitch
+----------------------------------------------
+
+-- Clean version of bubble_company_pitch
+SELECT bcp."Creator" as email, MAX(bcp."pitch challenges") AS pitch_challenge
+INTO TEMP TABLE tmp_pitch_challenge_to_email
+FROM bubble_user bu
+LEFT JOIN bubble_company_pitch bcp
+  ON bu.email = bcp."Creator"
+WHERE bu."User type" = 'Founder' AND bu.last_name <> '' AND bcp."Creator" IS NOT NULL
+GROUP BY bcp."Creator"
+ORDER BY bcp."Creator";
+
+INSERT INTO pitch(id, created_at, created_by_id, version, owner_id, user_id,
+  deck_comfort_level, presentation_comfort_level, organization_id, presentation_status, challenges, status, short_description) 
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+  u.id AS user_id,
+  CAST ( bc."deck comfort lvl" AS integer ) AS deck_comfort_level,
+  CAST ( bc."presentation comfort lvl" AS integer ) AS presentation_comfort_level,
+  o.id AS organization_id,
+  bc.clean_presented AS presentation_status,
+  pce.pitch_challenge AS challenges,
+  'ACTIVE' AS status, -- TODO: Allison which do we publish?
+  bc.description AS short_description
+FROM public.user u
+INNER JOIN bubble_user bu ON u.id = bu."unique id"
+LEFT JOIN tmp_pitch_challenge_to_email pce ON pce.email = bu.email
+LEFT JOIN bubble_company bc ON bu.company_id = bc."unique id"
+LEFT JOIN organization o ON u.id = o.user_id
+WHERE u.migrated_from_bubble = TRUE
+  AND u.status = 'ACTIVE';
+
+DROP TABLE tmp_pitch_challenge_to_email;
+
+----------------------------------------------
+-- pitch_video
+----------------------------------------------
+
+-- Temp table for pitch video files
+SELECT substr(md5(random()::text), 0, 25) AS file_id,
+  substr(md5(random()::text), 0, 25) AS video_id,
+  u.id as user_id, 
+  bu.email AS email,  
+  bfv.video_id as wistia_id,
+ 'Video migrated from bubble - we have no S3 asset' AS url
+INTO TEMP TABLE tmp_pitch_videos
+FROM bubble_user bu
+INNER JOIN public.user u ON u.id = bu."unique id"
+INNER JOIN bubble_founder_video_id bfv
+  ON bu.wistia_video_id = bfv."unique id"
+WHERE bfv.video_id IS NOT NULL;
+
+INSERT INTO file(id, created_at, created_by_id, version, owner_id, 
+  url)
+SELECT 
+  tmp.file_id,
+  now() AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+  tmp.url
+FROM tmp_pitch_videos tmp
+INNER JOIN public.user u ON tmp.user_id = u.id;
+
+INSERT INTO video(id, created_at, created_by_id, version, owner_id, 
+  file_id, wistia_id)
+SELECT 
+  tmp.video_id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+
+  tmp.file_id AS file_id,
+  tmp.wistia_id AS wistia_id
+FROM tmp_pitch_videos tmp
+INNER JOIN public.user u ON tmp.user_id = u.id;
+
+INSERT INTO pitch_video(id, created_at, created_by_id, version, owner_id, 
+  pitch_id, video_id, status)
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+
+  p.id AS pitch_id,
+  tmp.video_id AS video_id,
+  'ACTIVE' AS status 
+FROM tmp_pitch_videos tmp
+INNER JOIN public.user u ON tmp.user_id = u.id
+INNER JOIN pitch p ON u.id = p.user_id;
+
+DROP TABLE tmp_pitch_videos;
+
+----------------------------------------------
+-- pitch_deck
+----------------------------------------------
+
+-- Temp table for pitch deck files
+SELECT substr(md5(random()::text), 0, 25) AS file_id, u.id as user_id, bu.email AS email, 'https:' || bc."pitch deck" AS url
+INTO TEMP TABLE tmp_pitch_decks
+FROM public.user u
+INNER JOIN bubble_user bu ON u.id = bu."unique id"
+INNER JOIN bubble_company bc ON bu.company_id = bc."unique id"
+WHERE LENGTH(bc."pitch deck") > 10
+  AND POSITION('.pdf' in bc."pitch deck") > 0; -- Ensure this is a PDF
+
+INSERT INTO file(id, created_at, created_by_id, version, owner_id,
+  url) 
+SELECT 
+  tmp.file_id AS id,
+  now() AS created_at,
+  tmp.user_id AS created_by_id,
+  1 AS version,
+  tmp.user_id AS owner_id,
+  tmp.url AS url
+FROM tmp_pitch_decks tmp;
+
+INSERT INTO pitch_deck(id, created_at, created_by_id, version, owner_id, 
+  pitch_id, file_id, status)
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+
+  p.id AS pitch_id,
+  tmp.file_id AS file_id,
+  'ACTIVE' AS status 
+FROM public.user u
+INNER JOIN pitch p ON u.id = p.user_id
+INNER JOIN tmp_pitch_decks tmp ON u.id = tmp.user_id;
+
+DROP TABLE tmp_pitch_decks;
+
+----------------------------------------------
+-- course (course_step, course_product)
+----------------------------------------------
+
+SELECT * 
+INTO TABLE bubble_reviews_completed
+FROM
+(
+	SELECT "unique id", email,
+	  CASE WHEN b1_f1 = 'yes' OR b2_f1 = 'yes' OR b3_f1 = 'yes' OR b4_f1 = 'yes' OR b5_f1 = 'yes' THEN TRUE ELSE FALSE END AS written_1,
+	  CASE WHEN b1_f2 = 'yes' OR b2_f2 = 'yes' OR b3_f2 = 'yes' OR b4_f2 = 'yes' OR b5_f2 = 'yes' THEN TRUE ELSE FALSE END AS written_2,
+	  CASE WHEN b1_video = 'yes' OR b2_video = 'yes' OR b3_video = 'yes' OR b4_video = 'yes' OR b5_video = 'yes' THEN TRUE ELSE FALSE END AS video_1,
+	  CASE WHEN b1_video_extra = 'yes' OR b2_video_extra = 'yes' OR b3_video_extra = 'yes' OR b4_video_extra = 'yes' OR b5_video_extra = 'yes' THEN TRUE ELSE FALSE END AS video_extra,
+	  CASE 
+	    WHEN b5_progress = '100' THEN 100 
+	    WHEN b4_progress = '60' THEN 60
+	    WHEN b3_progress = '40' THEN 40
+	    WHEN b2_progress = '20' THEN 20
+	    ELSE 0 END AS progress
+	FROM
+	(
+		SELECT bu."unique id", bu.email,
+		  b1."feedback 1" AS b1_f1, b1."feedback 2" AS b1_f2, b1."pitch review " AS b1_video, b1."extra pitch review" AS b1_video_extra, b1.progress AS b1_progress,
+		  b2."feedback 1" AS b2_f1, b2."feedback 2" AS b2_f2, b2."pitch review" AS b2_video, b2."extra pitch review" AS b2_video_extra, b2.progress AS b2_progress,
+		  b3."feedback 1" AS b3_f1, b3."feedback 2" AS b3_f2, b3."pitch review" AS b3_video, b3."extra pitch review" AS b3_video_extra, b3.progress AS b3_progress,
+		  b4."feedback 1" AS b4_f1, b4."feedback 2" AS b4_f2, b4."pitch review" AS b4_video, b4."extra pitch review" AS b4_video_extra, b4.progress AS b4_progress,
+		  b5."feedback 1" AS b5_f1, b5."feedback 2" AS b5_f2, b5."pitch review " AS b5_video, b5."extra pitch review" AS b5_video_extra, b5.progress AS b5_progress
+		FROM bubble_user bu
+    INNER JOIN public.user u ON bu."unique id" = u.id
+		LEFT JOIN bubble_module_1 b1 ON bu.mod_1_id = b1."unique id"
+		LEFT JOIN bubble_module_2 b2 ON bu.mod_2_id = b2."unique id"
+		LEFT JOIN bubble_module_3 b3 ON bu.mod_3_id = b3."unique id"
+		LEFT JOIN bubble_module_4 b4 ON bu.mod_4_id = b4."unique id"
+		LEFT JOIN bubble_module_5 b5 ON bu.mod_5_id = b5."unique id"
+	) bubble_steps_tmp
+) bubble_steps;
+
+INSERT INTO course(id, created_at, created_by_id, version, owner_id,
+ 	status, current_step, course_definition_id, pitch_id) 
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  u.created_at AS created_at,
+  u.created_by_id AS created_by_id,
+  1 AS version,
+  u.id AS owner_id,
+
+  CASE WHEN TRUE THEN 'ACTIVE' ELSE 'COMPLETED' END AS status,
+  0 AS current_step,
+  cd.id AS course_definition_id,
+  p.id AS pitch_id
+FROM pitch p
+INNER JOIN public.user u ON p.user_id = u.id
+INNER JOIN bubble_reviews_completed bc ON p.user_id = bc."unique id"
+LEFT JOIN course_definition cd ON 1=1;
+
+----------------------------------------------
+-- perks
+----------------------------------------------
+
+-- Temp table for perk company logo files
+SELECT substr(md5(random()::text), 0, 25) AS file_id, '1' as user_id, 'https:' || bp."company logo" AS url, bp."unique id" as bubble_perk_id
+INTO TEMP TABLE tmp_perk_logos
+FROM bubble_perk bp;
+
+INSERT INTO file(id, created_at, created_by_id, version, owner_id,
+  url) 
+SELECT 
+  tmp.file_id AS id,
+  now() AS created_at,
+  tmp.user_id AS created_by_id,
+  1 AS version,
+  tmp.user_id AS owner_id,
+  tmp.url AS url
+FROM tmp_perk_logos tmp;
+
+INSERT INTO perk(id, created_at, created_by_id, version, owner_id,
+  company_bio, company_name, description, logo_file_id, perk_category_id, url) 
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  now() AS created_at,
+  tmp.user_id AS created_by_id,
+  1 AS version,
+  tmp.user_id AS owner_id,
+  bp."company description" AS company_bio,
+  bp."company name" AS company_name,
+  bp."headline" AS description,
+  tmp.file_id AS logo_file_id, -- TODO: bp."company logo"
+  'EMAIL' AS perk_category_id, -- TODO: 
+  bp."website url" AS url
+FROM tmp_perk_logos tmp
+INNER JOIN bubble_perk bp ON tmp.bubble_perk_id = bp."unique id";
+
+DROP TABLE tmp_perk_logos;
+
+----------------------------------------------
+-- suggested_resources
+----------------------------------------------
+
+TRUNCATE TABLE suggested_resource;
+DROP TABLE IF EXISTS tmp_suggested_resource;
+
+SELECT substr(md5(random()::text), 0, 25) AS file_id,
+  substr(md5(random()::text), 0, 25) AS resource_id,
+  asr.category AS suggested_resource_category_id,
+  asr.name AS company_name,
+  asr.url AS url
+INTO TEMP TABLE tmp_suggested_resource
+FROM bubble_allison_suggested_resource asr;
+
+SELECT * FROM tmp_suggested_resource;
+
+INSERT INTO file(id, created_at, created_by_id, version, owner_id,
+  url) 
+SELECT 
+  tmp.file_id AS id,
+  now() AS created_at,
+  '1' AS created_by_id,
+  1 AS version,
+  '1' AS owner_id,
+  'https://cdn-icons-png.flaticon.com/512/5229/5229377.png' AS url
+FROM tmp_suggested_resource tmp;
+
+INSERT INTO suggested_resource(id, created_at, created_by_id, version, owner_id,
+  company_name, logo_file_id, suggested_resource_category_id, url) 
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  now() AS created_at,
+  '1' AS created_by_id,
+  1 AS version,
+  '1' AS owner_id,
+  tmp.company_name AS company_name,  
+  tmp.file_id AS logo_file_id,
+  tmp.suggested_resource_category_id AS suggested_resource_category_id,
+  tmp.url AS url
+FROM tmp_suggested_resource tmp;
+
+DROP TABLE tmp_suggested_resource;
+
+------------------------------------------------------------------------------------
+-- Create user.create events so that these users are "identified" in Customer.io
+------------------------------------------------------------------------------------
+
+INSERT INTO event(id, type, status, object_type, object_id, owner_id, payload, created_at, created_by_id)
+SELECT 
+  substr(md5(random()::text), 0, 25) AS id,
+  'user.create' AS type,
+  'NEW' AS status,
+  'user' AS object_type,
+  u.id AS object_id,
+  '1' AS owner_id,
+  ('{ "data": { }, "resource": { "createdById": "' || u.id || '", "id": "' || u.id || '",  "email": "' || u.email || '" } }')::jsonb AS payload,
+  NOW() AS created_at,
+  '1' AS created_by_id
+FROM public.user u;
+
+------------------------------------------
+-- TODO: course_products: need to claim feedback folks have completed
+------------------------------------------
+
+-- Written 1
+INSERT INTO course_product(id, owner_id, created_at, created_by_id, version, course_id, product_id, status, object_id)
+SELECT
+  substr(md5(random()::text), 0, 25) AS id,
+  u.id AS owner_id,
+  NOW() AS created_at,
+  u.id AS created_by_id,
+  100 AS version,
+  c.id AS course_id,
+  p.id AS product_id,
+  CASE WHEN written_1 = TRUE THEN 'COMPLETE_MIGRATED' ELSE 'AVAILABLE' END AS status,
+  CASE WHEN written_1 = TRUE THEN 'MIGRATED' ELSE NULL END AS object_id
+FROM public.user u
+INNER JOIN course c ON c.owner_id = u.id
+INNER JOIN bubble_reviews_completed brc ON u.email = brc.email
+INNER JOIN product p ON p.name = 'Written Pitch Feedback';
+
+-- Written 2
+INSERT INTO course_product(id, owner_id, created_at, created_by_id, version, course_id, product_id, status, object_id)
+SELECT
+  substr(md5(random()::text), 0, 25) AS id,
+  u.id AS owner_id,
+  NOW() AS created_at,
+  u.id AS created_by_id,
+  101 AS version,
+  c.id AS course_id,
+  p.id AS product_id,
+  CASE WHEN written_2 = TRUE THEN 'COMPLETE_MIGRATED' ELSE 'AVAILABLE' END AS status,
+  CASE WHEN written_2 = TRUE THEN 'MIGRATED' ELSE NULL END AS object_id
+FROM public.user u
+INNER JOIN course c ON c.owner_id = u.id
+INNER JOIN bubble_reviews_completed brc ON u.email = brc.email
+INNER JOIN product p ON p.name = 'Written Pitch Feedback';
+
+-- Video 1
+INSERT INTO course_product(id, owner_id, created_at, created_by_id, version, course_id, product_id, status, object_id)
+SELECT
+  substr(md5(random()::text), 0, 25) AS id,
+  u.id AS owner_id,
+  NOW() AS created_at,
+  u.id AS created_by_id,
+  102 AS version,
+  c.id AS course_id,
+  p.id AS product_id,
+  CASE WHEN video_1 = TRUE THEN 'COMPLETE_MIGRATED' ELSE 'AVAILABLE' END AS status,
+  CASE WHEN video_1 = TRUE THEN 'MIGRATED' ELSE NULL END AS object_id
+FROM public.user u
+INNER JOIN course c ON c.owner_id = u.id
+INNER JOIN bubble_reviews_completed brc ON u.email = brc.email
+INNER JOIN product p ON p.name = '1:1 Pitch Review';

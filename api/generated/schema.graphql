@@ -1,0 +1,3510 @@
+type AccreditationStatus {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input AccreditationStatusCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input AccreditationStatusUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input AccreditationStatusWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input AccreditationStatusWhereUniqueInput {
+  id: ID!
+}
+
+type AuthAccount {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  userId: ID!
+  providerType: String!
+  providerId: String!
+  providerAccountId: String!
+  refreshToken: String
+  accessToken: String
+  accessTokenExpires: DateTime
+  user: User!
+}
+
+input AuthAccountCreateInput {
+  userId: ID!
+  providerType: String!
+  providerId: String!
+  providerAccountId: String!
+  refreshToken: String
+  accessToken: String
+  accessTokenExpires: DateTime
+}
+
+enum AuthAccountOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input AuthAccountUpdateInput {
+  userId: ID
+  providerType: String
+  providerId: String
+  providerAccountId: String
+  refreshToken: String
+  accessToken: String
+  accessTokenExpires: DateTime
+}
+
+input AuthAccountWhereInput {
+  providerId_eq: String
+  providerAccountId_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input AuthAccountWhereUniqueInput {
+  id: ID
+}
+
+type CalendlyWebhookEvent {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: CalendlyWebhookEventStatus!
+  type: String!
+  raw: JSONObject!
+}
+
+input CalendlyWebhookEventCreateInput {
+  type: String!
+  raw: JSONObject!
+}
+
+enum CalendlyWebhookEventStatus {
+  NEW
+  PROCESSED
+  SKIPPED
+}
+
+input CalendlyWebhookEventUpdateInput {
+  type: String
+  raw: JSONObject
+}
+
+input CalendlyWebhookEventWhereInput {
+  status_eq: CalendlyWebhookEventStatus
+  raw_json: JSONObject
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CalendlyWebhookEventWhereUniqueInput {
+  id: ID!
+}
+
+type CheckoutRequest {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  stripePlanId: String!
+}
+
+input CheckoutRequestCreateInput {
+  stripePlanId: String!
+  successUrl: String!
+  cancelUrl: String!
+}
+
+type CheckoutRequestCreateResponse {
+  sessionUrl: String!
+}
+
+input CheckoutRequestUpdateInput {
+  stripePlanId: String
+  successUrl: String
+  cancelUrl: String
+}
+
+input CheckoutRequestWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CheckoutRequestWhereUniqueInput {
+  id: ID!
+}
+
+type CheckoutResponse {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  stripeSessionId: String!
+}
+
+input CheckoutResponseCreateInput {
+  stripeSessionId: String!
+}
+
+type CheckoutResponseCreateResponse {
+  stripeCustomerId: String
+  stripeSubscriptionId: String
+  stripeCustomerName: String
+  stripeCustomerEmail: String
+  stripePlanId: String
+  stripePlanName: String
+  appliesTo: String
+}
+
+input CheckoutResponseUpdateInput {
+  stripeSessionId: String
+}
+
+input CheckoutResponseWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CheckoutResponseWhereUniqueInput {
+  id: ID!
+}
+
+type City {
+  id: ID!
+  lat: Float
+  lon: Float
+  population: Int
+  stateProvince: StateProvince!
+  stateProvinceId: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input CityCreateInput {
+  lat: Float
+  lon: Float
+  population: Float
+  stateProvinceId: ID!
+  description: String!
+  archived: Boolean!
+}
+
+enum CityOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input CityUpdateInput {
+  lat: Float
+  lon: Float
+  population: Float
+  stateProvinceId: ID
+  description: String
+  archived: Boolean
+}
+
+input CityWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input CityWhereUniqueInput {
+  id: ID!
+}
+
+type CompanyRole {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input CompanyRoleCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input CompanyRoleUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input CompanyRoleWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input CompanyRoleWhereUniqueInput {
+  id: ID!
+}
+
+type CompanyStage {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input CompanyStageCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input CompanyStageUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input CompanyStageWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input CompanyStageWhereUniqueInput {
+  id: ID!
+}
+
+type Conversation {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  friendlyName: String
+  conversationMessages: [ConversationMessage!]!
+  conversationParticipants: [ConversationParticipant!]!
+}
+
+input ConversationCreateInput {
+  friendlyName: String
+}
+
+type ConversationMessage {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  conversationId: ID!
+  body: String!
+  pitchDeckId: ID
+  readAt: DateTime
+  createdBy: UserSafe!
+}
+
+input ConversationMessageCreateInput {
+  conversationId: ID!
+  body: String!
+  readAt: DateTime
+}
+
+input ConversationMessageUpdateInput {
+  conversationId: ID
+  body: String
+  readAt: DateTime
+}
+
+input ConversationMessageWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input ConversationMessageWhereUniqueInput {
+  id: ID!
+}
+
+enum ConversationOrderByInput {
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ConversationParticipant {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  conversation: Conversation!
+  conversationId: ID!
+  user: User!
+  userId: ID!
+  lastReadAt: DateTime
+  messageAnonymously: Boolean
+}
+
+input ConversationParticipantCreateInput {
+  conversationId: ID!
+  userId: ID!
+  lastReadAt: DateTime
+}
+
+input ConversationParticipantUpdateInput {
+  conversationId: ID
+  userId: ID
+  lastReadAt: DateTime
+}
+
+input ConversationParticipantWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input ConversationParticipantWhereUniqueInput {
+  id: ID!
+}
+
+input ConversationUpdateInput {
+  friendlyName: String
+}
+
+input ConversationWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input ConversationWhereUniqueInput {
+  id: ID!
+}
+
+type CorporateStructure {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input CorporateStructureCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input CorporateStructureUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input CorporateStructureWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input CorporateStructureWhereUniqueInput {
+  id: ID!
+}
+
+type Country {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input CountryCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input CountryUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input CountryWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input CountryWhereUniqueInput {
+  id: ID!
+}
+
+type Course {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: CourseStatus!
+  courseSteps: [CourseStep!]!
+  courseDefinition: CourseDefinition!
+  courseDefinitionId: ID!
+  pitch: Pitch!
+  pitchId: ID!
+  currentStep: String!
+  courseProducts: [CourseProduct!]!
+}
+
+input CourseCreateInput {
+  courseDefinitionId: ID!
+}
+
+type CourseDefinition {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  name: String!
+  description: String!
+  courseStepDefinitions: [CourseStepDefinition!]!
+  courses: [Course!]!
+  courseDefinitionProducts: [CourseDefinitionProduct!]!
+}
+
+input CourseDefinitionCreateInput {
+  name: String!
+  description: String!
+}
+
+enum CourseDefinitionOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type CourseDefinitionProduct {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  name: String!
+  description: String!
+  courseDefinition: CourseDefinition!
+  courseDefinitionId: ID!
+  product: Product!
+  productId: ID!
+}
+
+input CourseDefinitionProductCreateInput {
+  name: String!
+  description: String!
+  courseDefinitionId: ID!
+  productId: ID!
+}
+
+enum CourseDefinitionProductOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input CourseDefinitionProductUpdateInput {
+  name: String
+  description: String
+  courseDefinitionId: ID
+  productId: ID
+}
+
+input CourseDefinitionProductWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CourseDefinitionProductWhereUniqueInput {
+  id: ID!
+}
+
+input CourseDefinitionUpdateInput {
+  name: String
+  description: String
+}
+
+input CourseDefinitionWhereInput {
+  name_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CourseDefinitionWhereUniqueInput {
+  id: ID!
+}
+
+enum CourseOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type CourseProduct {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  course: Course!
+  courseId: ID!
+  product: Product!
+  productId: ID!
+  objectId: ID
+  status: CourseProductStatus!
+}
+
+input CourseProductCreateInput {
+  courseId: ID!
+  productId: ID!
+  objectId: ID
+}
+
+enum CourseProductOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum CourseProductStatus {
+  AVAILABLE
+  COMPLETE
+  COMPLETE_MIGRATED
+}
+
+input CourseProductUpdateInput {
+  courseId: ID
+  productId: ID
+  objectId: ID
+}
+
+input CourseProductWhereInput {
+  courseId_eq: ID
+  status_eq: CourseProductStatus
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CourseProductWhereUniqueInput {
+  id: ID!
+}
+
+enum CourseStatus {
+  ACTIVE
+  COMPLETE
+  CANCELLED
+}
+
+type CourseStep {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: CourseStepStatus!
+  course: Course!
+  courseId: ID!
+  courseStepDefinition: CourseStepDefinition!
+  courseStepDefinitionId: ID!
+  data: JSONObject!
+  createdBy: User!
+}
+
+input CourseStepCreateInput {
+  courseId: ID!
+  courseStepDefinitionId: ID!
+  data: JSONObject!
+}
+
+type CourseStepDefinition {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  name: String!
+  section: String!
+  sequenceNum: Int!
+  description: String!
+  eventType: String
+  type: CourseStepDefinitionType!
+  config: JSONObject!
+  courseDefinition: CourseDefinition!
+  courseDefinitionId: ID!
+}
+
+input CourseStepDefinitionCreateInput {
+  name: String!
+  section: String!
+  sequenceNum: Float!
+  description: String!
+  eventType: String
+  type: CourseStepDefinitionType!
+  config: JSONObject!
+  courseDefinitionId: ID!
+}
+
+enum CourseStepDefinitionOrderByInput {
+  sequenceNum_ASC
+  sequenceNum_DESC
+}
+
+enum CourseStepDefinitionType {
+  VIDEO
+  DOWNLOAD
+  UPLOAD_PITCH_VIDEO
+  UPLOAD_SHORT_PITCH_VIDEO
+  UPLOAD_EXTENDED_PITCH_VIDEO
+  UPLOAD_PITCH_DECK
+  FORM
+  MARKDOWN
+  INSTRUCTIONS
+}
+
+input CourseStepDefinitionUpdateInput {
+  name: String
+  section: String
+  sequenceNum: Float
+  description: String
+  eventType: String
+  type: CourseStepDefinitionType
+  config: JSONObject
+  courseDefinitionId: ID
+}
+
+input CourseStepDefinitionWhereInput {
+  sequenceNum_gt: Int
+  config_json: JSONObject
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CourseStepDefinitionWhereUniqueInput {
+  id: ID!
+}
+
+type CourseStepDownloadResult {
+  data: CourseStep!
+  action: UpsertAction!
+}
+
+enum CourseStepOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum CourseStepStatus {
+  COMPLETE
+  NEW
+}
+
+type CourseStepSubmitResult {
+  data: CourseStep!
+  course: Course!
+  action: UpsertAction!
+}
+
+input CourseStepUpdateInput {
+  courseId: ID
+  courseStepDefinitionId: ID
+  data: JSONObject
+}
+
+input CourseStepWhereInput {
+  status_eq: CourseStepStatus
+  courseId_eq: ID
+  courseStepDefinitionId_eq: ID
+  data_json: JSONObject
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CourseStepWhereUniqueInput {
+  id: ID!
+}
+
+input CourseUpdateInput {
+  courseDefinitionId: ID
+}
+
+input CourseWhereInput {
+  status_eq: CourseStatus
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input CourseWhereUniqueInput {
+  id: ID!
+}
+
+type Criteria {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input CriteriaCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input CriteriaUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input CriteriaWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input CriteriaWhereUniqueInput {
+  id: ID!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+interface DeleteResponse {
+  id: ID!
+}
+
+type Disability {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input DisabilityCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input DisabilityUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input DisabilityWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input DisabilityWhereUniqueInput {
+  id: ID!
+}
+
+type Ethnicity {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input EthnicityCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input EthnicityUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input EthnicityWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input EthnicityWhereUniqueInput {
+  id: ID!
+}
+
+type Event {
+  id: ID!
+  type: String!
+  status: EventStatus!
+  statusMessage: String
+  objectType: String!
+  objectId: ID!
+  ownerId: String!
+  payload: JSONObject
+  createdAt: DateTime!
+  createdById: ID!
+}
+
+input EventCreateInput {
+  type: String!
+  status: EventStatus!
+  statusMessage: String
+  objectType: String!
+  objectId: ID!
+  ownerId: String!
+  payload: JSONObject
+}
+
+enum EventOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum EventStatus {
+  NEW
+  PROCESSED
+  SKIPPED
+  FAILED
+}
+
+type EventType {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  name: String!
+  template: String
+  allowSubscription: Boolean!
+}
+
+input EventTypeCreateInput {
+  name: String!
+  template: String
+  allowSubscription: Boolean!
+}
+
+enum EventTypeOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input EventTypeUpdateInput {
+  name: String
+  template: String
+  allowSubscription: Boolean
+}
+
+input EventTypeWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input EventTypeWhereUniqueInput {
+  name: String
+  id: ID
+}
+
+input EventUpdateInput {
+  type: String
+  status: EventStatus
+  statusMessage: String
+  objectType: String
+  objectId: ID
+  ownerId: String
+  payload: JSONObject
+}
+
+input EventWhereInput {
+  status_eq: EventStatus
+  payload_json: JSONObject
+  id_in: [ID!]
+}
+
+input EventWhereUniqueInput {
+  id: ID!
+}
+
+input ExecutePasswordResetInput {
+  token: String!
+  password: String!
+  confirmPassword: String!
+}
+
+type ExternalSystemId {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  externalSystemId: String!
+  externalSystemName: ExternalSystemType!
+}
+
+input ExternalSystemIdCreateInput {
+  externalSystemId: String!
+  externalSystemName: ExternalSystemType!
+}
+
+input ExternalSystemIdUpdateInput {
+  externalSystemId: String
+  externalSystemName: ExternalSystemType
+}
+
+input ExternalSystemIdWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input ExternalSystemIdWhereUniqueInput {
+  id: ID!
+}
+
+enum ExternalSystemType {
+  STRIPE
+}
+
+type File {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  url: String!
+}
+
+input FileCreateInput {
+  url: String!
+}
+
+input FileCreateSignedURLInput {
+  fileName: String!
+}
+
+type FileSignedURLResponse {
+  signedUrl: String
+}
+
+input FileUpdateInput {
+  url: String
+}
+
+input FileWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input FileWhereUniqueInput {
+  id: ID!
+}
+
+type FounderProfile {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  user: User!
+  userId: String!
+  stateProvince: String!
+  twitterUrl: String
+  linkedinUrl: String
+  ethnicities: [String!]
+  gender: String
+  sexualOrientation: String
+  companyStage: String
+  fundingStatus: String
+  industry: [String!]
+  presentationStatus: String
+  transgender: String
+  disability: String
+  companyRoles: [String!]
+  workingStatus: String
+  pronouns: String
+  source: String
+  bubbleLocation: String
+}
+
+input FounderProfileCreateInput {
+  stateProvince: String!
+  twitterUrl: String
+  linkedinUrl: String
+  ethnicities: [String!]
+  gender: String
+  sexualOrientation: String
+  companyStage: String
+  fundingStatus: String
+  industry: [String!]
+  presentationStatus: String
+  transgender: String
+  disability: String
+  companyRoles: [String!]
+  workingStatus: String
+  pronouns: String
+  source: String
+  bubbleLocation: String
+}
+
+input FounderProfileUpdateInput {
+  stateProvince: String
+  twitterUrl: String
+  linkedinUrl: String
+  ethnicities: [String!]
+  gender: String
+  sexualOrientation: String
+  companyStage: String
+  fundingStatus: String
+  industry: [String!]
+  presentationStatus: String
+  transgender: String
+  disability: String
+  companyRoles: [String!]
+  workingStatus: String
+  pronouns: String
+  source: String
+  bubbleLocation: String
+}
+
+input FounderProfileWhereInput {
+  ethnicities_containsAll: [String!]
+  ethnicities_containsNone: [String!]
+  ethnicities_containsAny: [String!]
+  industry_containsAll: [String!]
+  industry_containsNone: [String!]
+  industry_containsAny: [String!]
+  companyRoles_containsAll: [String!]
+  companyRoles_containsNone: [String!]
+  companyRoles_containsAny: [String!]
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input FounderProfileWhereUniqueInput {
+  userId: String
+  id: ID
+}
+
+type FundingStatus {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input FundingStatusCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input FundingStatusUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input FundingStatusWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input FundingStatusWhereUniqueInput {
+  id: ID!
+}
+
+type Gender {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input GenderCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input GenderUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input GenderWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input GenderWhereUniqueInput {
+  id: ID!
+}
+
+type Industry {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input IndustryCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input IndustryUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input IndustryWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input IndustryWhereUniqueInput {
+  id: ID!
+}
+
+type InvestorProfile {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  userId: String!
+  accreditationStatuses: [String!]!
+  linkedinUrl: String
+  investorTypes: [String!]!
+  thesis: String
+  criteria: [String!]
+  ethnicities: [String!]
+  gender: String
+  pronouns: String
+  industries: [String!]
+  demographics: [String!]
+  stateProvince: String
+  companyStages: [String!]
+  fundingStatuses: [String!]
+  revenues: [String!]
+  source: String
+}
+
+input InvestorProfileCreateInput {
+  accreditationStatuses: [String!]!
+  linkedinUrl: String
+  investorTypes: [String!]!
+  thesis: String
+  criteria: [String!]
+  ethnicities: [String!]
+  gender: String
+  pronouns: String
+  industries: [String!]
+  demographics: [String!]
+  stateProvince: String
+  companyStages: [String!]
+  fundingStatuses: [String!]
+  revenues: [String!]
+  source: String
+}
+
+input InvestorProfileUpdateInput {
+  accreditationStatuses: [String!]
+  linkedinUrl: String
+  investorTypes: [String!]
+  thesis: String
+  criteria: [String!]
+  ethnicities: [String!]
+  gender: String
+  pronouns: String
+  industries: [String!]
+  demographics: [String!]
+  stateProvince: String
+  companyStages: [String!]
+  fundingStatuses: [String!]
+  revenues: [String!]
+  source: String
+}
+
+input InvestorProfileWhereInput {
+  userId_eq: String
+  accreditationStatuses_containsAll: [String!]
+  accreditationStatuses_containsNone: [String!]
+  accreditationStatuses_containsAny: [String!]
+  investorTypes_containsAll: [String!]
+  investorTypes_containsNone: [String!]
+  investorTypes_containsAny: [String!]
+  criteria_containsAll: [String!]
+  criteria_containsNone: [String!]
+  criteria_containsAny: [String!]
+  ethnicities_containsAll: [String!]
+  ethnicities_containsNone: [String!]
+  ethnicities_containsAny: [String!]
+  industries_containsAll: [String!]
+  industries_containsNone: [String!]
+  industries_containsAny: [String!]
+  demographics_containsAll: [String!]
+  demographics_containsNone: [String!]
+  demographics_containsAny: [String!]
+  companyStages_containsAll: [String!]
+  companyStages_containsNone: [String!]
+  companyStages_containsAny: [String!]
+  fundingStatuses_containsAll: [String!]
+  fundingStatuses_containsNone: [String!]
+  fundingStatuses_containsAny: [String!]
+  revenues_containsAll: [String!]
+  revenues_containsNone: [String!]
+  revenues_containsAny: [String!]
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input InvestorProfileWhereUniqueInput {
+  userId: String
+  id: ID
+}
+
+type InvestorType {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input InvestorTypeCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input InvestorTypeUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input InvestorTypeWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input InvestorTypeWhereUniqueInput {
+  id: ID!
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+type List {
+  id: String!
+  name: String!
+  items: [ListItem!]!
+}
+
+type ListItem {
+  id: String!
+  code: String!
+  description: String!
+  archived: Boolean!
+}
+
+input ListWhereInput {
+  listName_in: [String!]!
+}
+
+type ManageStripeSubscriptionResponse {
+  url: String!
+}
+
+type Mutation {
+  createPermission(data: PermissionCreateInput!): Permission!
+  createManyPermissions(data: [PermissionCreateInput!]!): [Permission!]!
+  updatePermission(data: PermissionUpdateInput!, where: PermissionWhereUniqueInput!): Permission!
+  deletePermission(where: PermissionWhereUniqueInput!): StandardDeleteResponse!
+  createRolePermission(data: RolePermissionCreateInput!): RolePermission!
+  createManyRolePermissions(data: [RolePermissionCreateInput!]!): [RolePermission!]!
+  updateRolePermission(data: RolePermissionUpdateInput!, where: RolePermissionWhereUniqueInput!): RolePermission!
+  deleteRolePermission(where: RolePermissionWhereUniqueInput!): StandardDeleteResponse!
+  createRole(data: RoleCreateInput!): Role!
+  createManyRoles(data: [RoleCreateInput!]!): [Role!]!
+  updateRole(data: RoleUpdateInput!, where: RoleWhereUniqueInput!): Role!
+  deleteRole(where: RoleWhereUniqueInput!): StandardDeleteResponse!
+  createUserRole(data: UserRoleCreateInput!): UserRole!
+  createManyUserRoles(data: [UserRoleCreateInput!]!): [UserRole!]!
+  updateUserRole(data: UserRoleUpdateInput!, where: UserRoleWhereUniqueInput!): UserRole!
+  deleteUserRole(where: UserRoleWhereUniqueInput!): StandardDeleteResponse!
+  createCalendlyWebhookEvent(data: CalendlyWebhookEventCreateInput!): CalendlyWebhookEvent!
+  createConversationMessage(data: ConversationMessageCreateInput!): ConversationMessage!
+  createUploadSignedUrl(data: FileCreateSignedURLInput!): FileSignedURLResponse!
+  createConversation(data: ConversationCreateInput!): Conversation!
+  startConversation(participantIds: [String!]!, messageBody: String!, conversationData: ConversationCreateInput!): Conversation!
+  createManyConversations(data: [ConversationCreateInput!]!): [Conversation!]!
+  updateConversation(data: ConversationUpdateInput!, where: ConversationWhereUniqueInput!): Conversation!
+  deleteConversation(where: ConversationWhereUniqueInput!): StandardDeleteResponse!
+  createCheckoutRequest(data: CheckoutRequestCreateInput!): CheckoutRequestCreateResponse!
+  createCheckoutResponse(data: CheckoutResponseCreateInput!): CheckoutResponseCreateResponse!
+  createUserActivity(data: UserActivityCreateInput!): UserActivity!
+  createCourseProduct(data: CourseProductCreateInput!): CourseProduct!
+  updateCourseProduct(data: CourseProductUpdateInput!, where: CourseProductWhereUniqueInput!): CourseProduct!
+  createCourseStepDefinition(data: CourseStepDefinitionCreateInput!): CourseStepDefinition!
+  createManyCourseStepDefinitions(data: [CourseStepDefinitionCreateInput!]!): [CourseStepDefinition!]!
+  updateCourseStepDefinition(data: CourseStepDefinitionUpdateInput!, where: CourseStepDefinitionWhereUniqueInput!): CourseStepDefinition!
+  deleteCourseStepDefinition(where: CourseStepDefinitionWhereUniqueInput!): StandardDeleteResponse!
+  submitCourseStep(data: CourseStepUpdateInput!, where: CourseStepWhereInput!): CourseStepSubmitResult!
+  downloadCourseStep(data: CourseStepUpdateInput!, where: CourseStepWhereInput!): CourseStepSubmitResult!
+  createCourse(data: CourseCreateInput!): Course!
+  completeCourse(where: CourseWhereUniqueInput!): Course!
+  updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course!
+  deleteCourse(where: CourseWhereUniqueInput!): StandardDeleteResponse!
+  createFounderProfile(data: FounderProfileCreateInput!): FounderProfile!
+  updateFounderProfile(data: FounderProfileUpdateInput!, where: FounderProfileWhereUniqueInput!): FounderProfile!
+  createStartup(data: StartupCreateInput!): Startup!
+  updateStartup(data: StartupUpdateInput!, where: StartupWhereUniqueInput!): Startup!
+  createAuthAccount(data: AuthAccountCreateInput!): AuthAccount!
+  deleteAuthAccount(where: AuthAccountWhereUniqueInput!): StandardDeleteResponse!
+  createOrganization(data: OrganizationCreateInput!): Organization!
+  updateOrganization(data: OrganizationUpdateInput!, where: OrganizationWhereUniqueInput!): Organization!
+  deleteOrganization(where: OrganizationWhereUniqueInput!): StandardDeleteResponse!
+  requestPasswordReset(data: PasswordResetCreateInput!): Boolean!
+  executePasswordReset(data: ExecutePasswordResetInput!): Boolean!
+  createSession(data: SessionCreateInput!): Session!
+  updateSession(data: SessionUpdateInput!, where: SessionWhereUniqueInput!): Session!
+  deleteSession(where: SessionWhereUniqueInput!): StandardDeleteResponse!
+  createUserInvite(data: UserInviteCreateInput!): UserInvite!
+  createUserPlanRegistration(data: UserPlanRegistrationCreateInput!): UserPlanRegistration!
+  register(data: UserRegisterInput!): User!
+  login(data: UserLoginInput!): UserLoginResponse!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+  updateUserStatus(action: String!, userId: String!): User!
+  deleteUser(where: UserWhereUniqueInput!): StandardDeleteResponse!
+  createVerificationRequest(data: VerificationRequestCreateInput!): VerificationRequest!
+  deleteVerificationRequest(where: VerificationRequestWhereUniqueInput!): StandardDeleteResponse!
+  createInvestorProfile(data: InvestorProfileCreateInput!): InvestorProfile!
+  updateInvestorProfile(data: InvestorProfileUpdateInput!, where: InvestorProfileWhereUniqueInput!): InvestorProfile!
+  createPerk(data: PerkCreateInput!): Perk!
+  updatePerk(data: PerkUpdateInput!, where: PerkWhereUniqueInput!): Perk!
+  createPitchComment(data: PitchCommentCreateInput!): PitchComment!
+  createPitchDeck(data: PitchDeckCreateExtendedInput!): PitchDeck!
+  updatePitchDeck(data: PitchDeckUpdateInput!, where: PitchDeckWhereUniqueInput!): PitchDeck!
+  requestPitchMeetingFeedback(data: PitchMeetingFeedbackRequestInput!): PitchMeetingFeedback!
+  assignPitchMeetingFeedback(where: PitchMeetingFeedbackWhereUniqueInput!, data: PitchMeetingFeedbackAssignInput!): PitchMeetingFeedback!
+  completePitchMeetingFeedback(where: PitchMeetingFeedbackWhereUniqueInput!, data: PitchMeetingFeedbackCompleteInput!): PitchMeetingFeedback!
+  deletePitchMeetingFeedback(where: PitchMeetingFeedbackWhereUniqueInput!): StandardDeleteResponse!
+  createPitchUpdate(data: PitchUpdateCreateInput!): PitchUpdate!
+  upsertPitchUserStatus(data: PitchUserStatusUpdateInput!, where: PitchUserStatusWhereInput!): PitchUserStatusUpsertResult!
+  createPitchVideo(data: PitchVideoCreateExtendedInput!): PitchVideo!
+  updatePitchVideo(data: PitchVideoUpdateInput!, where: PitchVideoWhereUniqueInput!): PitchVideo!
+  requestPitchWrittenFeedback(data: PitchWrittenFeedbackRequestInput!): PitchWrittenFeedback!
+  requestPitchWrittenFeedbackRetainDeck(data: PitchWrittenFeedbackRequestRetainDeckInput!): PitchWrittenFeedback!
+  assignPitchWrittenFeedback(where: PitchWrittenFeedbackWhereUniqueInput!, data: PitchWrittenFeedbackAssignInput!): PitchWrittenFeedback!
+  completePitchWrittenFeedback(where: PitchWrittenFeedbackWhereUniqueInput!, data: PitchWrittenFeedbackCompleteInput!): PitchWrittenFeedback!
+  deletePitchWrittenFeedback(where: PitchWrittenFeedbackWhereUniqueInput!): StandardDeleteResponse!
+  createPitch(data: PitchCreateInput!): Pitch!
+  publishPitch(where: PitchWhereUniqueInput!): Pitch!
+  unpublishPitch(where: PitchWhereUniqueInput!): Pitch!
+  updatePitch(data: PitchUpdateInput!, where: PitchWhereUniqueInput!): Pitch!
+  createPlan(data: PlanCreateInput!): Plan!
+  createStripeWebhookEvent(data: StripeWebhookEventCreateInput!): StripeWebhookEvent!
+  createEventType(data: EventTypeCreateInput!): EventType!
+  createManyEventTypes(data: [EventTypeCreateInput!]!): [EventType!]!
+  updateEventType(data: EventTypeUpdateInput!, where: EventTypeWhereUniqueInput!): EventType!
+  deleteEventType(where: EventTypeWhereUniqueInput!): StandardDeleteResponse!
+  createEvent(data: EventCreateInput!): Event!
+  createManyEvents(data: [EventCreateInput!]!): [Event!]!
+  updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event!
+  deleteEvent(where: EventWhereUniqueInput!): StandardDeleteResponse!
+  createSubscription(data: SubscriptionCreateInput!): Subscription!
+  createManySubscriptions(data: [SubscriptionCreateInput!]!): [Subscription!]!
+  updateSubscription(data: SubscriptionUpdateInput!, where: SubscriptionWhereUniqueInput!): Subscription!
+  deleteSubscription(where: SubscriptionWhereUniqueInput!): StandardDeleteResponse!
+  createSuggestedResource(data: SuggestedResourceCreateInput!): SuggestedResource!
+  updateSuggestedResource(data: SuggestedResourceUpdateInput!, where: SuggestedResourceWhereUniqueInput!): SuggestedResource!
+}
+
+type Organization {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  userId: ID!
+  name: String!
+  website: String!
+  pitches: [Pitch!]!
+  courses: [Course!]!
+  startup: Startup!
+  user: User!
+}
+
+input OrganizationCreateInput {
+  userId: ID!
+  name: String!
+  website: String!
+}
+
+enum OrganizationOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type OrganizationSafe {
+  id: String!
+  name: String!
+  website: String!
+}
+
+input OrganizationUpdateInput {
+  userId: ID
+  name: String
+  website: String
+}
+
+input OrganizationWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input OrganizationWhereUniqueInput {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type PasswordReset {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: PasswordResetStatus!
+  email: String!
+  token: String!
+  expiresAt: DateTime!
+}
+
+input PasswordResetCreateInput {
+  email: String!
+}
+
+enum PasswordResetStatus {
+  OPEN
+  COMPLETE
+}
+
+input PasswordResetUpdateInput {
+  email: String
+}
+
+input PasswordResetWhereInput {
+  status_eq: PasswordResetStatus
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PasswordResetWhereUniqueInput {
+  token: String
+  id: ID
+}
+
+enum PaymentStatus {
+  SUCCEEDED
+  REQUIRES_ACTION
+  REQUIRES_PAYMENT_METHOD
+  PROCESSING
+  AMOUNT_CAPTURABLE_UPDATED
+  PAYMENT_FAILED
+}
+
+type Perk {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  companyName: String!
+  companyBio: String!
+  description: String!
+  perkCategory: PerkCategory!
+  perkCategoryId: ID!
+  url: String!
+  logoFile: File!
+  logoFileId: ID!
+}
+
+type PerkCategory {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  perks: [Perk!]!
+}
+
+input PerkCategoryCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input PerkCategoryUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input PerkCategoryWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input PerkCategoryWhereUniqueInput {
+  id: ID!
+}
+
+input PerkCreateInput {
+  companyName: String!
+  companyBio: String!
+  description: String!
+  perkCategoryId: ID!
+  url: String!
+  logoFileId: ID!
+}
+
+enum PerkOrderByInput {
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+input PerkUpdateInput {
+  companyName: String
+  companyBio: String
+  description: String
+  perkCategoryId: ID
+  url: String
+  logoFileId: ID
+}
+
+input PerkWhereInput {
+  perkCategoryId_eq: ID
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PerkWhereUniqueInput {
+  id: ID!
+}
+
+type Permission {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  code: String!
+  description: String
+  rolePermissions: [RolePermission!]!
+}
+
+input PermissionCreateInput {
+  code: String!
+  description: String
+}
+
+enum PermissionOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input PermissionUpdateInput {
+  code: String
+  description: String
+}
+
+input PermissionWhereInput {
+  code_eq: String
+  code_in: [String!]
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PermissionWhereUniqueInput {
+  code: String
+  id: ID
+}
+
+type Pitch {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: PitchStatus!
+  user: User!
+  userId: ID!
+  organization: Organization!
+  organizationId: ID!
+  createdBy: User!
+  updatedBy: User!
+  shortDescription: String
+  presentationStatus: String
+  deckComfortLevel: Int
+  presentationComfortLevel: Int
+  challenges: String
+  pitchDecks: [PitchDeck!]!
+  pitchVideos: [PitchVideo!]!
+  pitchUserStatuses: [PitchUserStatus!]!
+  updates: [PitchUpdate!]!
+  comments: [PitchComment!]!
+  course: Course
+  female: Boolean!
+  minority: Boolean!
+  views: Int!
+  bookmarks: Int!
+  watchStatus: String
+  listStatus: String
+  activePitchDeck: PitchDeck
+  latestPitchDeck: PitchDeck
+  activePitchVideo: PitchVideo
+  extendedPitchVideo: PitchVideo
+}
+
+type PitchComment {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  body: String!
+  pitch: Pitch!
+  pitchId: ID!
+  visibility: PitchCommentVisibility!
+  createdBy: User!
+}
+
+input PitchCommentCreateInput {
+  body: String!
+  pitchId: ID!
+  visibility: PitchCommentVisibility!
+}
+
+input PitchCommentUpdateInput {
+  body: String
+  pitchId: ID
+  visibility: PitchCommentVisibility
+}
+
+enum PitchCommentVisibility {
+  ANONYMOUS
+  VISIBLE
+}
+
+input PitchCommentWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchCommentWhereUniqueInput {
+  id: ID!
+}
+
+input PitchCreateInput {
+  shortDescription: String
+  presentationStatus: String
+  deckComfortLevel: Float
+  presentationComfortLevel: Float
+  challenges: String
+  listStatus: String
+}
+
+type PitchDeck {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: PitchDeckStatus!
+  draft: Boolean!
+  isCategorized: Boolean!
+  numPages: Int!
+  pitchId: ID!
+  file: File!
+  fileId: ID!
+  pitch: Pitch!
+}
+
+input PitchDeckCreateExtendedInput {
+  pitchId: String!
+  file: FileCreateInput!
+  draft: Boolean
+}
+
+input PitchDeckCreateInput {
+  draft: Boolean!
+  isCategorized: Boolean!
+  numPages: Float!
+  pitchId: ID!
+}
+
+enum PitchDeckOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum PitchDeckStatus {
+  ACTIVE
+  INACTIVE
+}
+
+input PitchDeckUpdateInput {
+  draft: Boolean
+  isCategorized: Boolean
+  numPages: Float
+  pitchId: ID
+  status: PitchDeckStatus
+}
+
+input PitchDeckWhereInput {
+  status_eq: PitchDeckStatus
+  draft_eq: Boolean
+  isCategorized_eq: Boolean
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchDeckWhereUniqueInput {
+  id: ID!
+}
+
+enum PitchListStatus {
+  DEFAULT
+  BOOKMARK
+  IGNORE
+}
+
+type PitchMeetingFeedback {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: PitchMeetingFeedbackStatus!
+  pitch: Pitch!
+  pitchId: ID!
+  recordingFile: File
+  recordingFileId: ID
+  reviewerNotes: String
+  courseProduct: CourseProduct!
+  courseProductId: String!
+  reviewer: User
+  reviewerId: ID
+}
+
+input PitchMeetingFeedbackAssignInput {
+  reviewerId: String!
+}
+
+input PitchMeetingFeedbackCompleteInput {
+  file: FileCreateInput!
+  reviewerNotes: String
+}
+
+input PitchMeetingFeedbackCreateInput {
+  pitchId: ID!
+  reviewerNotes: String
+  courseProductId: String!
+  reviewerId: ID
+}
+
+enum PitchMeetingFeedbackOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+}
+
+input PitchMeetingFeedbackRequestInput {
+  pitchId: String!
+  courseProductId: String!
+  ownerId: String!
+}
+
+enum PitchMeetingFeedbackStatus {
+  REQUESTED
+  ASSIGNED
+  COMPLETE
+}
+
+input PitchMeetingFeedbackUpdateInput {
+  pitchId: ID
+  reviewerNotes: String
+  courseProductId: String
+  reviewerId: ID
+}
+
+input PitchMeetingFeedbackWhereInput {
+  status_eq: PitchMeetingFeedbackStatus
+  courseProductId_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchMeetingFeedbackWhereUniqueInput {
+  id: ID!
+}
+
+enum PitchOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  views_ASC
+  views_DESC
+  bookmarks_ASC
+  bookmarks_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+input PitchQueryInput {
+  status_eq: PitchStatus
+  userId_eq: ID
+  userId_in: [ID!]
+  organizationId_eq: ID
+  organizationId_in: [ID!]
+  ownerId_eq: ID
+  ownerId_in: [ID!]
+  female_eq: Boolean
+  female_in: [Boolean!]
+  minority_eq: Boolean
+  minority_in: [Boolean!]
+  listStatus_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+  watchStatus_eq: String
+  femaleLeader_eq: String
+  minorityLeader_eq: String
+  industry_eq: String
+  stateProvince_eq: String
+  fundingStatus_eq: String
+  companyStage_eq: String
+  revenue_eq: String
+}
+
+enum PitchStatus {
+  DRAFT
+  ACTIVE
+  PUBLISHED
+}
+
+type PitchUpdate {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  body: String!
+  pitch: Pitch!
+  pitchId: ID!
+  createdBy: User!
+}
+
+input PitchUpdateCreateInput {
+  body: String!
+  pitchId: ID!
+}
+
+input PitchUpdateInput {
+  shortDescription: String
+  presentationStatus: String
+  deckComfortLevel: Float
+  presentationComfortLevel: Float
+  challenges: String
+  listStatus: String
+}
+
+input PitchUpdateUpdateInput {
+  body: String
+  pitchId: ID
+}
+
+input PitchUpdateWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchUpdateWhereUniqueInput {
+  id: ID!
+}
+
+type PitchUserStatus {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  user: User!
+  userId: ID!
+  pitch: Pitch!
+  pitchId: ID!
+  watchStatus: PitchWatchStatus!
+  listStatus: PitchListStatus!
+}
+
+input PitchUserStatusCreateInput {
+  pitchId: ID!
+  watchStatus: PitchWatchStatus!
+  listStatus: PitchListStatus!
+}
+
+input PitchUserStatusUpdateInput {
+  pitchId: ID
+  watchStatus: PitchWatchStatus
+  listStatus: PitchListStatus
+}
+
+type PitchUserStatusUpsertResult {
+  data: PitchUserStatus!
+  action: UpsertAction!
+}
+
+input PitchUserStatusWhereInput {
+  userId_eq: ID
+  pitchId_eq: ID
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchUserStatusWhereUniqueInput {
+  userId: ID
+  pitchId: ID
+  id: ID
+}
+
+type PitchVideo {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: PitchVideoStatus!
+  extendedVideo: Boolean!
+  pitchId: ID!
+  video: Video!
+  videoId: ID!
+  pitch: Pitch!
+}
+
+input PitchVideoCreateExtendedInput {
+  pitchId: String!
+  video: VideoCreateInput!
+  extendedVideo: Boolean
+}
+
+input PitchVideoCreateInput {
+  extendedVideo: Boolean!
+  pitchId: ID!
+}
+
+enum PitchVideoOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum PitchVideoStatus {
+  ACTIVE
+  INACTIVE
+}
+
+input PitchVideoUpdateInput {
+  extendedVideo: Boolean
+  pitchId: ID
+  status: PitchVideoStatus
+}
+
+input PitchVideoWhereInput {
+  status_eq: PitchVideoStatus
+  extendedVideo_eq: Boolean
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchVideoWhereUniqueInput {
+  id: ID!
+}
+
+enum PitchWatchStatus {
+  UNWATCHED
+  WATCHED
+  UNWATCHED_MANUAL
+}
+
+input PitchWhereInput {
+  status_eq: PitchStatus
+  userId_eq: ID
+  userId_in: [ID!]
+  organizationId_eq: ID
+  organizationId_in: [ID!]
+  ownerId_eq: ID
+  ownerId_in: [ID!]
+  female_eq: Boolean
+  female_in: [Boolean!]
+  minority_eq: Boolean
+  minority_in: [Boolean!]
+  listStatus_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchWhereUniqueInput {
+  id: ID!
+}
+
+type PitchWrittenFeedback {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: PitchWrittenFeedbackStatus!
+  pitch: Pitch!
+  pitchId: ID!
+  originalPitchDeck: PitchDeck
+  originalPitchDeckId: ID
+  reviewedPitchDeck: PitchDeck
+  reviewedPitchDeckId: ID
+  reviewerNotes: String
+  courseProduct: CourseProduct!
+  courseProductId: String!
+  reviewer: User
+  reviewerId: ID
+}
+
+input PitchWrittenFeedbackAssignInput {
+  reviewerId: String!
+}
+
+input PitchWrittenFeedbackCompleteInput {
+  pitchDeck: PitchDeckCreateExtendedInput!
+  reviewerNotes: String
+}
+
+input PitchWrittenFeedbackCreateInput {
+  pitchId: ID!
+  reviewerNotes: String
+  courseProductId: String!
+}
+
+enum PitchWrittenFeedbackOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+}
+
+input PitchWrittenFeedbackRequestInput {
+  pitchId: String!
+  pitchDeck: PitchDeckCreateExtendedInput!
+  courseProductId: String!
+}
+
+input PitchWrittenFeedbackRequestRetainDeckInput {
+  pitchId: String!
+  pitchDeck: PitchDeckWhereUniqueInput!
+  courseProductId: String!
+}
+
+enum PitchWrittenFeedbackStatus {
+  DRAFT
+  REQUESTED
+  ASSIGNED
+  COMPLETE
+  AWAITING_QA
+}
+
+input PitchWrittenFeedbackUpdateInput {
+  pitchId: ID
+  reviewerNotes: String
+  courseProductId: String
+}
+
+input PitchWrittenFeedbackWhereInput {
+  status_eq: PitchWrittenFeedbackStatus
+  courseProductId_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PitchWrittenFeedbackWhereUniqueInput {
+  id: ID!
+}
+
+type Plan {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  stripePlanId: String!
+  stripePlanName: String!
+  stripePlanDescription: String!
+  stripePlanCurrency: String!
+  stripePlanPrice: Float!
+  stripePlanPeriod: String!
+  stripePlanSubscriptionId: String!
+  status: PaymentStatus
+  user: User!
+  userId: ID!
+}
+
+input PlanCreateInput {
+  stripePlanId: String!
+  stripePlanName: String!
+  stripePlanDescription: String!
+  stripePlanCurrency: String!
+  stripePlanPrice: Float!
+  stripePlanPeriod: String!
+  stripePlanSubscriptionId: String!
+  status: PaymentStatus
+  userId: ID!
+}
+
+input PlanUpdateInput {
+  stripePlanId: String
+  stripePlanName: String
+  stripePlanDescription: String
+  stripePlanCurrency: String
+  stripePlanPrice: Float
+  stripePlanPeriod: String
+  stripePlanSubscriptionId: String
+  status: PaymentStatus
+  userId: ID
+}
+
+input PlanWhereInput {
+  status_eq: PaymentStatus
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input PlanWhereUniqueInput {
+  id: ID!
+}
+
+type PresentationStatus {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input PresentationStatusCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input PresentationStatusUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input PresentationStatusWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input PresentationStatusWhereUniqueInput {
+  id: ID!
+}
+
+type Product {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  name: String!
+  description: String!
+  courseDefinitionProducts: [CourseDefinitionProduct!]
+  courseProducts: [CourseProduct!]!
+}
+
+input ProductCreateInput {
+  name: String!
+  description: String!
+}
+
+enum ProductOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input ProductUpdateInput {
+  name: String
+  description: String
+}
+
+input ProductWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input ProductWhereUniqueInput {
+  id: ID!
+}
+
+type Pronoun {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input PronounCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input PronounUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input PronounWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input PronounWhereUniqueInput {
+  id: ID!
+}
+
+type Query {
+  permissions(offset: Int, limit: Int = 50, where: PermissionWhereInput, orderBy: PermissionOrderByInput): [Permission!]!
+  permissionsForUser: [String!]!
+  permission(where: PermissionWhereUniqueInput!): Permission!
+  rolePermissions(offset: Int, limit: Int = 50, where: RolePermissionWhereInput, orderBy: RolePermissionOrderByInput): [RolePermission!]!
+  rolePermission(where: RolePermissionWhereUniqueInput!): RolePermission!
+  roles(offset: Int, limit: Int = 50, where: RoleWhereInput, orderBy: RoleOrderByInput): [Role!]!
+  role(where: RoleWhereUniqueInput!): Role!
+  userRoles(offset: Int, limit: Int = 50, where: UserRoleWhereInput, orderBy: UserRoleOrderByInput): [UserRole!]!
+  userRole(where: UserRoleWhereUniqueInput!): UserRole!
+  conversations(offset: Int, limit: Int = 50, where: ConversationWhereInput, orderBy: ConversationOrderByInput): [Conversation!]!
+  conversation(where: ConversationWhereUniqueInput!): Conversation!
+  findExistingConversation(userId2: String!, userId1: String!): Conversation
+  cities(offset: Int, limit: Int = 50, where: CityWhereInput, orderBy: CityOrderByInput): [City!]!
+  city(where: CityWhereUniqueInput!): City
+  lists(where: ListWhereInput!): [List!]!
+  generateReport(type: String!): ReportResult!
+  slacks: SlackCommunityChannelHistoryResponse!
+  courseDefinitionProducts(offset: Int, limit: Int = 50, where: CourseDefinitionProductWhereInput, orderBy: CourseDefinitionProductOrderByInput): [CourseDefinitionProduct!]!
+  courseDefinitions(offset: Int, limit: Int = 50, where: CourseDefinitionWhereInput, orderBy: CourseDefinitionOrderByInput): [CourseDefinition!]!
+  courseProducts(offset: Int, limit: Int = 50, where: CourseProductWhereInput, orderBy: CourseProductOrderByInput): [CourseProduct!]!
+  courseStepDefinitions(offset: Int, limit: Int = 50, where: CourseStepDefinitionWhereInput, orderBy: CourseStepDefinitionOrderByInput): [CourseStepDefinition!]!
+  courseStepDefinition(where: CourseStepDefinitionWhereUniqueInput!): CourseStepDefinition!
+  courseSteps(offset: Int, limit: Int = 50, where: CourseStepWhereInput, orderBy: CourseStepOrderByInput): [CourseStep!]!
+  courseStep(where: CourseStepWhereUniqueInput!): CourseStep!
+  courses(offset: Int, limit: Int = 50, where: CourseWhereInput, orderBy: CourseOrderByInput): [Course!]!
+  course(where: CourseWhereUniqueInput!): Course!
+  startup(where: StartupWhereUniqueInput!): Startup!
+  authAccounts(offset: Int, limit: Int = 50, where: AuthAccountWhereInput, orderBy: AuthAccountOrderByInput): [AuthAccount!]!
+  organizations(offset: Int, limit: Int = 50, where: OrganizationWhereInput, orderBy: OrganizationOrderByInput): [Organization!]!
+  organization(where: OrganizationWhereUniqueInput!): Organization!
+  sessions(offset: Int, limit: Int = 50, where: SessionWhereInput, orderBy: SessionOrderByInput): [Session!]!
+  session(where: SessionWhereUniqueInput!): Session
+  userInvites(offset: Int, limit: Int = 50, where: UserInviteWhereInput, orderBy: UserInviteOrderByInput): [UserInvite!]!
+  me: User!
+  users(offset: Int, limit: Int = 50, where: UserWhereInput, orderBy: UserOrderByInput): [User!]!
+  user(where: UserWhereUniqueInput!): User!
+  verificationRequests(offset: Int, limit: Int = 50, where: VerificationRequestWhereInput, orderBy: VerificationRequestOrderByInput): [VerificationRequest!]!
+  verificationRequest(where: VerificationRequestWhereUniqueInput!): VerificationRequest!
+  investorProfile(where: InvestorProfileWhereUniqueInput!): InvestorProfile!
+  perks(offset: Int, limit: Int = 50, where: PerkWhereInput, orderBy: PerkOrderByInput): [Perk!]!
+  perk(where: PerkWhereUniqueInput!): Perk!
+  pitchDecks(offset: Int, limit: Int = 50, where: PitchDeckWhereInput, orderBy: PitchDeckOrderByInput): [PitchDeck!]!
+  pitchMeetingFeedbacks(offset: Int, limit: Int = 50, where: PitchMeetingFeedbackWhereInput, orderBy: PitchMeetingFeedbackOrderByInput): [PitchMeetingFeedback!]!
+  pitchMeetingFeedback(where: PitchMeetingFeedbackWhereUniqueInput!): PitchMeetingFeedback!
+  pitchUserStatus(where: PitchUserStatusWhereUniqueInput!): PitchUserStatus
+  pitchVideos(offset: Int, limit: Int = 50, where: PitchVideoWhereInput, orderBy: PitchVideoOrderByInput): [PitchVideo!]!
+  pitchWrittenFeedbacks(offset: Int, limit: Int = 50, where: PitchWrittenFeedbackWhereInput, orderBy: PitchWrittenFeedbackOrderByInput): [PitchWrittenFeedback!]!
+  pitchWrittenFeedback(where: PitchWrittenFeedbackWhereUniqueInput!): PitchWrittenFeedback!
+  pitches(offset: Int, limit: Int = 50, where: PitchQueryInput, orderBy: PitchOrderByInput): [Pitch!]!
+  pitch(where: PitchWhereUniqueInput!): Pitch!
+  pitchVideoStats: WistiaStats!
+  pitchVideoIframes: [WistiaIframe!]!
+  products(offset: Int, limit: Int = 50, where: ProductWhereInput, orderBy: ProductOrderByInput): [Product!]!
+  manageStripeSubscription: ManageStripeSubscriptionResponse!
+  eventTypes(offset: Int, limit: Int = 50, where: EventTypeWhereInput, orderBy: EventTypeOrderByInput): [EventType!]!
+  eventType(where: EventTypeWhereUniqueInput!): EventType!
+  events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: EventOrderByInput): [Event!]!
+  event(where: EventWhereUniqueInput!): Event!
+  subscriptions(offset: Int, limit: Int = 50, where: SubscriptionWhereInput, orderBy: SubscriptionOrderByInput): [Subscription!]!
+  subscription(where: SubscriptionWhereUniqueInput!): Subscription!
+  suggestedResources(offset: Int, limit: Int = 50, where: SuggestedResourceWhereInput, orderBy: SuggestedResourceOrderByInput): [SuggestedResource!]!
+  suggestedResource(where: SuggestedResourceWhereUniqueInput!): SuggestedResource!
+}
+
+type ReportResult {
+  result: String!
+}
+
+type Revenue {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input RevenueCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input RevenueUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input RevenueWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input RevenueWhereUniqueInput {
+  id: ID!
+}
+
+type Role {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  name: String!
+  code: String!
+  rolePermissions: Role!
+}
+
+input RoleCreateInput {
+  name: String!
+  code: String!
+}
+
+enum RoleOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type RolePermission {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  permission: Permission!
+  permissionId: ID!
+  role: Role!
+  roleId: ID!
+}
+
+input RolePermissionCreateInput {
+  permissionId: ID!
+  roleId: ID!
+}
+
+enum RolePermissionOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input RolePermissionUpdateInput {
+  permissionId: ID
+  roleId: ID
+}
+
+input RolePermissionWhereInput {
+  permissionId_eq: ID
+  roleId_eq: ID
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input RolePermissionWhereUniqueInput {
+  permissionId: ID
+  roleId: ID
+  id: ID
+}
+
+input RoleUpdateInput {
+  name: String
+  code: String
+}
+
+input RoleWhereInput {
+  name_eq: String
+  code_eq: String
+  code_in: [String!]
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input RoleWhereUniqueInput {
+  code: String
+  id: ID
+}
+
+type Session {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  userId: ID!
+  expires: DateTime!
+  sessionToken: String!
+  accessToken: String!
+}
+
+input SessionCreateInput {
+  userId: ID!
+  expires: DateTime!
+  sessionToken: String!
+  accessToken: String!
+}
+
+enum SessionOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input SessionUpdateInput {
+  userId: ID
+  expires: DateTime
+  sessionToken: String
+  accessToken: String
+}
+
+input SessionWhereInput {
+  sessionToken_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input SessionWhereUniqueInput {
+  sessionToken: String
+  accessToken: String
+  id: ID
+}
+
+type SexualOrientation {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input SexualOrientationCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input SexualOrientationUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input SexualOrientationWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input SexualOrientationWhereUniqueInput {
+  id: ID!
+}
+
+type SlackCommunityChannelHistoryResponse {
+  messages: [SlackMessage!]!
+}
+
+type SlackMessage {
+  text: String!
+  html: String!
+  ts: String!
+}
+
+type StandardDeleteResponse {
+  id: ID!
+}
+
+type Startup {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  user: User!
+  userId: String!
+  name: String
+  website: String
+  corporateStructure: String
+  country: String
+  stateProvince: String
+  fundraiseStatus: String
+  companyStage: String
+  revenue: String
+  industries: [String!]!
+  shortDescription: String
+  tinyDescription: String
+  originStory: String
+  presentationStatus: String
+  deckComfortLevel: Int
+  presentationComfortLevel: Int
+  businessChallenge: String
+  desiredSupport: String
+  anythingElse: String
+  additionalTeamMembers: Boolean
+  organization: Organization!
+  organizationId: String!
+}
+
+input StartupCreateInput {
+  name: String
+  website: String
+  corporateStructure: String
+  country: String
+  stateProvince: String
+  fundraiseStatus: String
+  companyStage: String
+  revenue: String
+  industries: [String!]!
+  shortDescription: String
+  originStory: String
+  presentationStatus: String
+  deckComfortLevel: Float
+  presentationComfortLevel: Float
+  businessChallenge: String
+  desiredSupport: String
+  anythingElse: String
+  additionalTeamMembers: Boolean
+}
+
+input StartupUpdateInput {
+  name: String
+  website: String
+  corporateStructure: String
+  country: String
+  stateProvince: String
+  fundraiseStatus: String
+  companyStage: String
+  revenue: String
+  industries: [String!]
+  shortDescription: String
+  originStory: String
+  tinyDescription: String
+  presentationStatus: String
+  deckComfortLevel: Float
+  presentationComfortLevel: Float
+  businessChallenge: String
+  desiredSupport: String
+  anythingElse: String
+  additionalTeamMembers: Boolean
+}
+
+input StartupWhereInput {
+  industries_containsAll: [String!]
+  industries_containsNone: [String!]
+  industries_containsAny: [String!]
+  organizationId_eq: String
+  organizationId_in: [String!]
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input StartupWhereUniqueInput {
+  id: ID!
+}
+
+type StateProvince {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input StateProvinceCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input StateProvinceUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input StateProvinceWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input StateProvinceWhereUniqueInput {
+  id: ID!
+}
+
+type StripeWebhookEvent {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: StripeWebhookEventStatus!
+  type: String!
+  raw: JSONObject!
+}
+
+input StripeWebhookEventCreateInput {
+  type: String!
+  raw: JSONObject!
+}
+
+enum StripeWebhookEventStatus {
+  NEW
+  PROCESSED
+  SKIPPED
+}
+
+input StripeWebhookEventUpdateInput {
+  type: String
+  raw: JSONObject
+}
+
+input StripeWebhookEventWhereInput {
+  status_eq: StripeWebhookEventStatus
+  raw_json: JSONObject
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input StripeWebhookEventWhereUniqueInput {
+  id: ID!
+}
+
+type Subscription {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  eventTypeId: String!
+  type: SubscriptionType!
+  url: String
+  jobId: String
+  active: Boolean
+}
+
+input SubscriptionCreateInput {
+  eventTypeId: String!
+  type: SubscriptionType!
+  url: String
+  jobId: String
+  active: Boolean
+}
+
+enum SubscriptionOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum SubscriptionType {
+  WEBHOOK
+  JOB
+}
+
+input SubscriptionUpdateInput {
+  eventTypeId: String
+  type: SubscriptionType
+  url: String
+  jobId: String
+  active: Boolean
+}
+
+input SubscriptionWhereInput {
+  url_eq: String
+  jobId_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input SubscriptionWhereUniqueInput {
+  id: ID!
+}
+
+type SuggestedResource {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  companyName: String!
+  suggestedResourceCategory: SuggestedResourceCategory!
+  suggestedResourceCategoryId: ID!
+  url: String!
+  logoFile: File!
+  logoFileId: ID!
+}
+
+type SuggestedResourceCategory {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  suggestedResources: [SuggestedResource!]!
+}
+
+input SuggestedResourceCategoryCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input SuggestedResourceCategoryUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input SuggestedResourceCategoryWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input SuggestedResourceCategoryWhereUniqueInput {
+  id: ID!
+}
+
+input SuggestedResourceCreateInput {
+  companyName: String!
+  suggestedResourceCategoryId: ID!
+  url: String!
+  logoFileId: ID!
+}
+
+enum SuggestedResourceOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input SuggestedResourceUpdateInput {
+  companyName: String
+  suggestedResourceCategoryId: ID
+  url: String
+  logoFileId: ID
+}
+
+input SuggestedResourceWhereInput {
+  suggestedResourceCategoryId_eq: ID
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input SuggestedResourceWhereUniqueInput {
+  id: ID!
+}
+
+type Transgender {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input TransgenderCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input TransgenderUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input TransgenderWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input TransgenderWhereUniqueInput {
+  id: ID!
+}
+
+enum UpsertAction {
+  CREATE
+  UPDATE
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: UserStatus!
+  name: String!
+  email: String!
+  emailVerified: DateTime
+  profilePictureFile: File!
+  profilePictureFileId: ID!
+  stripeUserId: String
+  isAccredited: Boolean
+  migratedFromBubble: Boolean
+  pitches: [Pitch!]
+  capabilities: [String!]!
+  investorProfile: InvestorProfile!
+  founderProfile: FounderProfile!
+  lastLoginAt: DateTime
+  firstName: String
+  organizations: [Organization!]!
+  plans: [Plan!]!
+}
+
+type UserActivity {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  eventType: String!
+  createdBy: User!
+}
+
+input UserActivityCreateInput {
+  eventType: String!
+}
+
+input UserActivityUpdateInput {
+  eventType: String
+}
+
+input UserActivityWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input UserActivityWhereUniqueInput {
+  id: ID!
+}
+
+input UserCreateInput {
+  name: String!
+  email: String!
+  profilePictureFileId: ID!
+  stripeUserId: String
+  isAccredited: Boolean
+  migratedFromBubble: Boolean
+  password: String
+}
+
+type UserInvite {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  status: UserInviteStatus!
+  email: String!
+  userType: String!
+  expiresAt: DateTime
+}
+
+input UserInviteCreateInput {
+  email: String!
+  userType: String!
+}
+
+enum UserInviteOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+enum UserInviteStatus {
+  OPEN
+  ACCEPTED
+}
+
+input UserInviteUpdateInput {
+  email: String
+  userType: String
+}
+
+input UserInviteWhereInput {
+  status_eq: UserInviteStatus
+  email_eq: String
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input UserInviteWhereUniqueInput {
+  id: ID!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type UserLoginResponse {
+  id: ID!
+  token: String!
+}
+
+enum UserOrderByInput {
+  lastLoginAt_ASC
+  lastLoginAt_DESC
+}
+
+type UserPlanRegistration {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  email: String!
+  fullName: String!
+  stripeSubscriptionId: String!
+  stripePlanId: String!
+  userType: String!
+  raw: JSONObject!
+  status: UserPlanRegistrationStatus!
+  user: User!
+  userId: ID!
+}
+
+input UserPlanRegistrationCreateInput {
+  email: String!
+  fullName: String!
+  stripeSubscriptionId: String!
+  stripePlanId: String!
+  userType: String!
+  raw: JSONObject!
+}
+
+enum UserPlanRegistrationStatus {
+  INPROGRESS
+  COMPLETED
+  FAILED
+}
+
+input UserPlanRegistrationUpdateInput {
+  email: String
+  fullName: String
+  stripeSubscriptionId: String
+  stripePlanId: String
+  userType: String
+  raw: JSONObject
+}
+
+input UserPlanRegistrationWhereInput {
+  raw_json: JSONObject
+  status_eq: UserPlanRegistrationStatus
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input UserPlanRegistrationWhereUniqueInput {
+  id: ID!
+}
+
+input UserRegisterInput {
+  name: String!
+  email: String!
+  profilePictureFileId: ID!
+  stripeUserId: String
+  isAccredited: Boolean
+  migratedFromBubble: Boolean
+  password: String
+  type: String!
+  confirmPassword: String!
+}
+
+type UserRole {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  userId: ID!
+  role: Role!
+  roleId: ID!
+  organization: String
+}
+
+input UserRoleCreateInput {
+  userId: ID!
+  roleId: ID!
+  organization: String
+}
+
+enum UserRoleOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input UserRoleUpdateInput {
+  userId: ID
+  roleId: ID
+  organization: String
+}
+
+input UserRoleWhereInput {
+  userId_eq: ID
+  roleId_eq: ID
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input UserRoleWhereUniqueInput {
+  userId: ID
+  roleId: ID
+  id: ID
+}
+
+type UserSafe {
+  id: String!
+  name: String!
+  firstName: String!
+  profilePictureFile: File!
+}
+
+enum UserStatus {
+  VERIFICATION
+  ONBOARDING
+  ONBOARDING_STARTUP
+  ACTIVE
+  INACTIVE
+}
+
+type UserType {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  type: String!
+  defaultRoleId: ID!
+  allowedAtRegistration: Boolean!
+}
+
+input UserTypeCreateInput {
+  type: String!
+  defaultRoleId: ID!
+  allowedAtRegistration: Boolean!
+}
+
+input UserTypeUpdateInput {
+  type: String
+  defaultRoleId: ID
+  allowedAtRegistration: Boolean
+}
+
+input UserTypeWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input UserTypeWhereUniqueInput {
+  id: ID!
+}
+
+input UserUpdateInput {
+  name: String
+  email: String
+  profilePictureFileId: ID
+  stripeUserId: String
+  isAccredited: Boolean
+  migratedFromBubble: Boolean
+  password: String
+}
+
+input UserWhereInput {
+  status_eq: UserStatus
+  name_contains: String
+  email_eq: String
+  isAccredited_eq: Boolean
+  migratedFromBubble_eq: Boolean
+  capabilities_containsAll: [String!]
+  capabilities_containsNone: [String!]
+  capabilities_containsAny: [String!]
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: ID
+}
+
+type VerificationRequest {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  identifier: String!
+  token: String!
+  expires: DateTime!
+}
+
+input VerificationRequestCreateInput {
+  identifier: String!
+  token: String!
+  expires: DateTime!
+}
+
+enum VerificationRequestOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+input VerificationRequestUpdateInput {
+  identifier: String
+  token: String
+  expires: DateTime
+}
+
+input VerificationRequestWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input VerificationRequestWhereUniqueInput {
+  token: String
+  id: ID
+}
+
+type Video {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  ownerId: ID!
+  file: File!
+  fileId: ID!
+  wistiaId: String!
+  wistiaUrl: String!
+}
+
+input VideoCreateExtendedInput {
+  pitchId: String!
+  file: FileCreateInput!
+}
+
+input VideoCreateInput {
+  fileId: ID!
+}
+
+input VideoUpdateInput {
+  fileId: ID
+}
+
+input VideoWhereInput {
+  deletedAt_all: Boolean
+  id_in: [ID!]
+}
+
+input VideoWhereUniqueInput {
+  id: ID!
+}
+
+type WistiaIframe {
+  url: String!
+}
+
+type WistiaStats {
+  load_count: Float!
+  play_count: Float!
+  play_rate: Float!
+  hours_watched: Float!
+  engagement: Float!
+  visitors: Float!
+}
+
+type WorkingStatus {
+  id: ID!
+  description: String!
+  archived: Boolean!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+}
+
+input WorkingStatusCreateInput {
+  description: String!
+  archived: Boolean!
+}
+
+input WorkingStatusUpdateInput {
+  description: String
+  archived: Boolean
+}
+
+input WorkingStatusWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  archived_eq: Boolean
+}
+
+input WorkingStatusWhereUniqueInput {
+  id: ID!
+}

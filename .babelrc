@@ -1,0 +1,22 @@
+{
+  "presets": ["next/babel"],
+  "plugins": [
+    // ["@babel/plugin-transform-typescript", { "allowDeclareFields": true }],
+    // https://github.com/babel/babel/discussions/12534
+    "babel-plugin-transform-typescript-metadata",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
+    ["@babel/plugin-proposal-private-methods", { "loose": true }],
+    [
+      "module-resolver",
+      {
+        "root": ["./"],
+        "alias": {
+          "@src": "./src"
+        },
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    ]
+  ]
+}

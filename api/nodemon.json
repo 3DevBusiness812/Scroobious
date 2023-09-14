@@ -1,0 +1,17 @@
+// {
+//   "ignore": [".git", "node_modules/**"],
+//   "verbose": true,
+//   "exec": "src/index.ts"
+//   // "execMap": {
+//   //   "js": "node --harmony"
+//   // },
+//   "events": {
+//     "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'",
+//     "start": "cls || clear"
+//   },
+//   "watch": [".env", "*.ts"]
+//   // "env": {
+//   //   "NODE_ENV": "development"
+//   // },
+//   // "ext": "js json"
+// }
